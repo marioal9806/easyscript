@@ -106,7 +106,7 @@ def t_SIZE_ID(t):
     return t
 
 def t_STRING(t):
-    r'["][a-zA-Z 0-9:!@#$%^&*()-+=/?<>,]+["]'
+    r'\"[a-zA-Z 0-9:!@#$%^&*()-+=/?<>,\\]+\"'
     t.value = str(t.value.lstrip("\"").rstrip("\""))
     return t
 
@@ -122,6 +122,11 @@ def t_error(t):
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
+
+def t_COMMENT(t):
+    r'//.*'
+    pass
+    # No return value. Token discarded
 
 lexer = lex.lex()
 # LEXER
