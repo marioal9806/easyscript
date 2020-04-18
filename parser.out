@@ -21,11 +21,11 @@ Rule 15    statement -> PRINT repeated_print
 Rule 16    statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
 Rule 17    statement -> WHILE expression block LOOP
 Rule 18    statement -> DO block LOOP WHILE expression
-Rule 19    statement -> LET IDENTIFIER repeated_size EQUALS expression
-Rule 20    statement -> IF expression THEN block ELSE block END IF
-Rule 21    statement -> GOSUB LABEL
-Rule 22    statement -> GOTO LABEL
-Rule 23    statement -> LABEL_SALTO
+Rule 19    statement -> IF expression THEN block ELSE block END IF
+Rule 20    statement -> GOSUB LABEL
+Rule 21    statement -> GOTO LABEL
+Rule 22    statement -> LABEL_SALTO
+Rule 23    statement -> LET IDENTIFIER repeated_size EQUALS expression
 Rule 24    procedure -> LABEL block RETURN procedure
 Rule 25    procedure -> <empty>
 Rule 26    repeated_print -> repeated_elem COMMA repeated_print
@@ -60,25 +60,25 @@ COMMA                : 8 26
 DIM                  : 2 3
 DIVIDE               : 38
 DO                   : 18
-ELSE                 : 20
-END                  : 1 20
-EQUALS               : 16 19
+ELSE                 : 19
+END                  : 1 19
+EQUALS               : 16 23
 FLOAT                : 43
 FLOAT_TYPE           : 11
 FOR                  : 16
-GOSUB                : 21
-GOTO                 : 22
+GOSUB                : 20
+GOTO                 : 21
 GREATERTHAN          : 46
-IDENTIFIER           : 8 9 16 16 19 44
-IF                   : 20 20
+IDENTIFIER           : 8 9 16 16 23 44
+IF                   : 19 19
 INPUT                : 14
 INT                  : 16 16 42
 INT_TYPE             : 10
 ISEQUALTO            : 47
-LABEL                : 21 22 24
-LABEL_SALTO          : 23
+LABEL                : 20 21 24
+LABEL_SALTO          : 22
 LESSTHAN             : 45
-LET                  : 19
+LET                  : 23
 LOOP                 : 17 18
 MINUS                : 34
 MULTIPLY             : 37
@@ -93,16 +93,16 @@ SIZE                 : 5
 SIZE_ID              : 6
 STRING               : 28
 STRING_TYPE          : 3
-THEN                 : 20
+THEN                 : 19
 TO                   : 16
 WHILE                : 17 18
 error                : 
 
 Nonterminals, with rules where they appear
 
-block                : 1 12 16 17 18 20 20 24
+block                : 1 12 16 17 18 19 19 24
 elem                 : 29 40
-expression           : 17 18 19 20 41
+expression           : 17 18 19 23 41
 expression_s         : 30 30 31 33 34 35
 factor               : 36 37 38 39
 op_rel               : 30
@@ -111,7 +111,7 @@ programa             : 0
 repeated_elem        : 26 27
 repeated_identifier  : 2 3 8
 repeated_print       : 14 15 26
-repeated_size        : 2 5 6 19 44
+repeated_size        : 2 5 6 23 44
 statement            : 12
 term                 : 32 33 34 35 37 38 39
 type                 : 2
@@ -148,11 +148,11 @@ state 2
     FOR             reduce using rule 4 (var -> .)
     WHILE           reduce using rule 4 (var -> .)
     DO              reduce using rule 4 (var -> .)
-    LET             reduce using rule 4 (var -> .)
     IF              reduce using rule 4 (var -> .)
     GOSUB           reduce using rule 4 (var -> .)
     GOTO            reduce using rule 4 (var -> .)
     LABEL_SALTO     reduce using rule 4 (var -> .)
+    LET             reduce using rule 4 (var -> .)
     END             reduce using rule 4 (var -> .)
 
     var                            shift and go to state 3
@@ -169,11 +169,11 @@ state 3
     FOR             reduce using rule 25 (procedure -> .)
     WHILE           reduce using rule 25 (procedure -> .)
     DO              reduce using rule 25 (procedure -> .)
-    LET             reduce using rule 25 (procedure -> .)
     IF              reduce using rule 25 (procedure -> .)
     GOSUB           reduce using rule 25 (procedure -> .)
     GOTO            reduce using rule 25 (procedure -> .)
     LABEL_SALTO     reduce using rule 25 (procedure -> .)
+    LET             reduce using rule 25 (procedure -> .)
     END             reduce using rule 25 (procedure -> .)
 
     procedure                      shift and go to state 5
@@ -199,11 +199,11 @@ state 5
     (16) statement -> . FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
     (17) statement -> . WHILE expression block LOOP
     (18) statement -> . DO block LOOP WHILE expression
-    (19) statement -> . LET IDENTIFIER repeated_size EQUALS expression
-    (20) statement -> . IF expression THEN block ELSE block END IF
-    (21) statement -> . GOSUB LABEL
-    (22) statement -> . GOTO LABEL
-    (23) statement -> . LABEL_SALTO
+    (19) statement -> . IF expression THEN block ELSE block END IF
+    (20) statement -> . GOSUB LABEL
+    (21) statement -> . GOTO LABEL
+    (22) statement -> . LABEL_SALTO
+    (23) statement -> . LET IDENTIFIER repeated_size EQUALS expression
 
     END             reduce using rule 13 (block -> .)
     INPUT           shift and go to state 11
@@ -211,11 +211,11 @@ state 5
     FOR             shift and go to state 13
     WHILE           shift and go to state 14
     DO              shift and go to state 15
-    LET             shift and go to state 16
-    IF              shift and go to state 17
-    GOSUB           shift and go to state 18
-    GOTO            shift and go to state 19
-    LABEL_SALTO     shift and go to state 20
+    IF              shift and go to state 16
+    GOSUB           shift and go to state 17
+    GOTO            shift and go to state 18
+    LABEL_SALTO     shift and go to state 19
+    LET             shift and go to state 20
 
     block                          shift and go to state 9
     statement                      shift and go to state 10
@@ -230,11 +230,11 @@ state 6
     (16) statement -> . FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
     (17) statement -> . WHILE expression block LOOP
     (18) statement -> . DO block LOOP WHILE expression
-    (19) statement -> . LET IDENTIFIER repeated_size EQUALS expression
-    (20) statement -> . IF expression THEN block ELSE block END IF
-    (21) statement -> . GOSUB LABEL
-    (22) statement -> . GOTO LABEL
-    (23) statement -> . LABEL_SALTO
+    (19) statement -> . IF expression THEN block ELSE block END IF
+    (20) statement -> . GOSUB LABEL
+    (21) statement -> . GOTO LABEL
+    (22) statement -> . LABEL_SALTO
+    (23) statement -> . LET IDENTIFIER repeated_size EQUALS expression
 
     RETURN          reduce using rule 13 (block -> .)
     INPUT           shift and go to state 11
@@ -242,11 +242,11 @@ state 6
     FOR             shift and go to state 13
     WHILE           shift and go to state 14
     DO              shift and go to state 15
-    LET             shift and go to state 16
-    IF              shift and go to state 17
-    GOSUB           shift and go to state 18
-    GOTO            shift and go to state 19
-    LABEL_SALTO     shift and go to state 20
+    IF              shift and go to state 16
+    GOSUB           shift and go to state 17
+    GOTO            shift and go to state 18
+    LABEL_SALTO     shift and go to state 19
+    LET             shift and go to state 20
 
     block                          shift and go to state 21
     statement                      shift and go to state 10
@@ -285,11 +285,11 @@ state 10
     (16) statement -> . FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
     (17) statement -> . WHILE expression block LOOP
     (18) statement -> . DO block LOOP WHILE expression
-    (19) statement -> . LET IDENTIFIER repeated_size EQUALS expression
-    (20) statement -> . IF expression THEN block ELSE block END IF
-    (21) statement -> . GOSUB LABEL
-    (22) statement -> . GOTO LABEL
-    (23) statement -> . LABEL_SALTO
+    (19) statement -> . IF expression THEN block ELSE block END IF
+    (20) statement -> . GOSUB LABEL
+    (21) statement -> . GOTO LABEL
+    (22) statement -> . LABEL_SALTO
+    (23) statement -> . LET IDENTIFIER repeated_size EQUALS expression
 
     END             reduce using rule 13 (block -> .)
     RETURN          reduce using rule 13 (block -> .)
@@ -301,11 +301,11 @@ state 10
     FOR             shift and go to state 13
     WHILE           shift and go to state 14
     DO              shift and go to state 15
-    LET             shift and go to state 16
-    IF              shift and go to state 17
-    GOSUB           shift and go to state 18
-    GOTO            shift and go to state 19
-    LABEL_SALTO     shift and go to state 20
+    IF              shift and go to state 16
+    GOSUB           shift and go to state 17
+    GOTO            shift and go to state 18
+    LABEL_SALTO     shift and go to state 19
+    LET             shift and go to state 20
 
     statement                      shift and go to state 10
     block                          shift and go to state 25
@@ -397,11 +397,11 @@ state 15
     (16) statement -> . FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
     (17) statement -> . WHILE expression block LOOP
     (18) statement -> . DO block LOOP WHILE expression
-    (19) statement -> . LET IDENTIFIER repeated_size EQUALS expression
-    (20) statement -> . IF expression THEN block ELSE block END IF
-    (21) statement -> . GOSUB LABEL
-    (22) statement -> . GOTO LABEL
-    (23) statement -> . LABEL_SALTO
+    (19) statement -> . IF expression THEN block ELSE block END IF
+    (20) statement -> . GOSUB LABEL
+    (21) statement -> . GOTO LABEL
+    (22) statement -> . LABEL_SALTO
+    (23) statement -> . LET IDENTIFIER repeated_size EQUALS expression
 
     LOOP            reduce using rule 13 (block -> .)
     INPUT           shift and go to state 11
@@ -409,25 +409,18 @@ state 15
     FOR             shift and go to state 13
     WHILE           shift and go to state 14
     DO              shift and go to state 15
-    LET             shift and go to state 16
-    IF              shift and go to state 17
-    GOSUB           shift and go to state 18
-    GOTO            shift and go to state 19
-    LABEL_SALTO     shift and go to state 20
+    IF              shift and go to state 16
+    GOSUB           shift and go to state 17
+    GOTO            shift and go to state 18
+    LABEL_SALTO     shift and go to state 19
+    LET             shift and go to state 20
 
     block                          shift and go to state 41
     statement                      shift and go to state 10
 
 state 16
 
-    (19) statement -> LET . IDENTIFIER repeated_size EQUALS expression
-
-    IDENTIFIER      shift and go to state 42
-
-
-state 17
-
-    (20) statement -> IF . expression THEN block ELSE block END IF
+    (19) statement -> IF . expression THEN block ELSE block END IF
     (30) expression -> . expression_s op_rel expression_s
     (31) expression -> . expression_s
     (32) expression_s -> . term
@@ -449,45 +442,52 @@ state 17
     FLOAT           shift and go to state 31
     IDENTIFIER      shift and go to state 32
 
-    expression                     shift and go to state 43
+    expression                     shift and go to state 42
     expression_s                   shift and go to state 36
     term                           shift and go to state 37
     factor                         shift and go to state 38
     elem                           shift and go to state 39
 
+state 17
+
+    (20) statement -> GOSUB . LABEL
+
+    LABEL           shift and go to state 43
+
+
 state 18
 
-    (21) statement -> GOSUB . LABEL
+    (21) statement -> GOTO . LABEL
 
     LABEL           shift and go to state 44
 
 
 state 19
 
-    (22) statement -> GOTO . LABEL
+    (22) statement -> LABEL_SALTO .
 
-    LABEL           shift and go to state 45
+    INPUT           reduce using rule 22 (statement -> LABEL_SALTO .)
+    PRINT           reduce using rule 22 (statement -> LABEL_SALTO .)
+    FOR             reduce using rule 22 (statement -> LABEL_SALTO .)
+    WHILE           reduce using rule 22 (statement -> LABEL_SALTO .)
+    DO              reduce using rule 22 (statement -> LABEL_SALTO .)
+    IF              reduce using rule 22 (statement -> LABEL_SALTO .)
+    GOSUB           reduce using rule 22 (statement -> LABEL_SALTO .)
+    GOTO            reduce using rule 22 (statement -> LABEL_SALTO .)
+    LABEL_SALTO     reduce using rule 22 (statement -> LABEL_SALTO .)
+    LET             reduce using rule 22 (statement -> LABEL_SALTO .)
+    END             reduce using rule 22 (statement -> LABEL_SALTO .)
+    RETURN          reduce using rule 22 (statement -> LABEL_SALTO .)
+    LOOP            reduce using rule 22 (statement -> LABEL_SALTO .)
+    ELSE            reduce using rule 22 (statement -> LABEL_SALTO .)
+    NEXT            reduce using rule 22 (statement -> LABEL_SALTO .)
 
 
 state 20
 
-    (23) statement -> LABEL_SALTO .
+    (23) statement -> LET . IDENTIFIER repeated_size EQUALS expression
 
-    INPUT           reduce using rule 23 (statement -> LABEL_SALTO .)
-    PRINT           reduce using rule 23 (statement -> LABEL_SALTO .)
-    FOR             reduce using rule 23 (statement -> LABEL_SALTO .)
-    WHILE           reduce using rule 23 (statement -> LABEL_SALTO .)
-    DO              reduce using rule 23 (statement -> LABEL_SALTO .)
-    LET             reduce using rule 23 (statement -> LABEL_SALTO .)
-    IF              reduce using rule 23 (statement -> LABEL_SALTO .)
-    GOSUB           reduce using rule 23 (statement -> LABEL_SALTO .)
-    GOTO            reduce using rule 23 (statement -> LABEL_SALTO .)
-    LABEL_SALTO     reduce using rule 23 (statement -> LABEL_SALTO .)
-    END             reduce using rule 23 (statement -> LABEL_SALTO .)
-    RETURN          reduce using rule 23 (statement -> LABEL_SALTO .)
-    LOOP            reduce using rule 23 (statement -> LABEL_SALTO .)
-    ELSE            reduce using rule 23 (statement -> LABEL_SALTO .)
-    NEXT            reduce using rule 23 (statement -> LABEL_SALTO .)
+    IDENTIFIER      shift and go to state 45
 
 
 state 21
@@ -547,11 +547,11 @@ state 26
     FOR             reduce using rule 14 (statement -> INPUT repeated_print .)
     WHILE           reduce using rule 14 (statement -> INPUT repeated_print .)
     DO              reduce using rule 14 (statement -> INPUT repeated_print .)
-    LET             reduce using rule 14 (statement -> INPUT repeated_print .)
     IF              reduce using rule 14 (statement -> INPUT repeated_print .)
     GOSUB           reduce using rule 14 (statement -> INPUT repeated_print .)
     GOTO            reduce using rule 14 (statement -> INPUT repeated_print .)
     LABEL_SALTO     reduce using rule 14 (statement -> INPUT repeated_print .)
+    LET             reduce using rule 14 (statement -> INPUT repeated_print .)
     END             reduce using rule 14 (statement -> INPUT repeated_print .)
     RETURN          reduce using rule 14 (statement -> INPUT repeated_print .)
     LOOP            reduce using rule 14 (statement -> INPUT repeated_print .)
@@ -570,11 +570,11 @@ state 27
     FOR             reduce using rule 27 (repeated_print -> repeated_elem .)
     WHILE           reduce using rule 27 (repeated_print -> repeated_elem .)
     DO              reduce using rule 27 (repeated_print -> repeated_elem .)
-    LET             reduce using rule 27 (repeated_print -> repeated_elem .)
     IF              reduce using rule 27 (repeated_print -> repeated_elem .)
     GOSUB           reduce using rule 27 (repeated_print -> repeated_elem .)
     GOTO            reduce using rule 27 (repeated_print -> repeated_elem .)
     LABEL_SALTO     reduce using rule 27 (repeated_print -> repeated_elem .)
+    LET             reduce using rule 27 (repeated_print -> repeated_elem .)
     END             reduce using rule 27 (repeated_print -> repeated_elem .)
     RETURN          reduce using rule 27 (repeated_print -> repeated_elem .)
     LOOP            reduce using rule 27 (repeated_print -> repeated_elem .)
@@ -592,11 +592,11 @@ state 28
     FOR             reduce using rule 28 (repeated_elem -> STRING .)
     WHILE           reduce using rule 28 (repeated_elem -> STRING .)
     DO              reduce using rule 28 (repeated_elem -> STRING .)
-    LET             reduce using rule 28 (repeated_elem -> STRING .)
     IF              reduce using rule 28 (repeated_elem -> STRING .)
     GOSUB           reduce using rule 28 (repeated_elem -> STRING .)
     GOTO            reduce using rule 28 (repeated_elem -> STRING .)
     LABEL_SALTO     reduce using rule 28 (repeated_elem -> STRING .)
+    LET             reduce using rule 28 (repeated_elem -> STRING .)
     END             reduce using rule 28 (repeated_elem -> STRING .)
     RETURN          reduce using rule 28 (repeated_elem -> STRING .)
     LOOP            reduce using rule 28 (repeated_elem -> STRING .)
@@ -614,11 +614,11 @@ state 29
     FOR             reduce using rule 29 (repeated_elem -> elem .)
     WHILE           reduce using rule 29 (repeated_elem -> elem .)
     DO              reduce using rule 29 (repeated_elem -> elem .)
-    LET             reduce using rule 29 (repeated_elem -> elem .)
     IF              reduce using rule 29 (repeated_elem -> elem .)
     GOSUB           reduce using rule 29 (repeated_elem -> elem .)
     GOTO            reduce using rule 29 (repeated_elem -> elem .)
     LABEL_SALTO     reduce using rule 29 (repeated_elem -> elem .)
+    LET             reduce using rule 29 (repeated_elem -> elem .)
     END             reduce using rule 29 (repeated_elem -> elem .)
     RETURN          reduce using rule 29 (repeated_elem -> elem .)
     LOOP            reduce using rule 29 (repeated_elem -> elem .)
@@ -636,11 +636,11 @@ state 30
     FOR             reduce using rule 42 (elem -> INT .)
     WHILE           reduce using rule 42 (elem -> INT .)
     DO              reduce using rule 42 (elem -> INT .)
-    LET             reduce using rule 42 (elem -> INT .)
     IF              reduce using rule 42 (elem -> INT .)
     GOSUB           reduce using rule 42 (elem -> INT .)
     GOTO            reduce using rule 42 (elem -> INT .)
     LABEL_SALTO     reduce using rule 42 (elem -> INT .)
+    LET             reduce using rule 42 (elem -> INT .)
     END             reduce using rule 42 (elem -> INT .)
     RETURN          reduce using rule 42 (elem -> INT .)
     LOOP            reduce using rule 42 (elem -> INT .)
@@ -669,11 +669,11 @@ state 31
     FOR             reduce using rule 43 (elem -> FLOAT .)
     WHILE           reduce using rule 43 (elem -> FLOAT .)
     DO              reduce using rule 43 (elem -> FLOAT .)
-    LET             reduce using rule 43 (elem -> FLOAT .)
     IF              reduce using rule 43 (elem -> FLOAT .)
     GOSUB           reduce using rule 43 (elem -> FLOAT .)
     GOTO            reduce using rule 43 (elem -> FLOAT .)
     LABEL_SALTO     reduce using rule 43 (elem -> FLOAT .)
+    LET             reduce using rule 43 (elem -> FLOAT .)
     END             reduce using rule 43 (elem -> FLOAT .)
     RETURN          reduce using rule 43 (elem -> FLOAT .)
     LOOP            reduce using rule 43 (elem -> FLOAT .)
@@ -707,11 +707,11 @@ state 32
     FOR             reduce using rule 7 (repeated_size -> .)
     WHILE           reduce using rule 7 (repeated_size -> .)
     DO              reduce using rule 7 (repeated_size -> .)
-    LET             reduce using rule 7 (repeated_size -> .)
     IF              reduce using rule 7 (repeated_size -> .)
     GOSUB           reduce using rule 7 (repeated_size -> .)
     GOTO            reduce using rule 7 (repeated_size -> .)
     LABEL_SALTO     reduce using rule 7 (repeated_size -> .)
+    LET             reduce using rule 7 (repeated_size -> .)
     END             reduce using rule 7 (repeated_size -> .)
     RETURN          reduce using rule 7 (repeated_size -> .)
     LOOP            reduce using rule 7 (repeated_size -> .)
@@ -740,11 +740,11 @@ state 33
     FOR             reduce using rule 15 (statement -> PRINT repeated_print .)
     WHILE           reduce using rule 15 (statement -> PRINT repeated_print .)
     DO              reduce using rule 15 (statement -> PRINT repeated_print .)
-    LET             reduce using rule 15 (statement -> PRINT repeated_print .)
     IF              reduce using rule 15 (statement -> PRINT repeated_print .)
     GOSUB           reduce using rule 15 (statement -> PRINT repeated_print .)
     GOTO            reduce using rule 15 (statement -> PRINT repeated_print .)
     LABEL_SALTO     reduce using rule 15 (statement -> PRINT repeated_print .)
+    LET             reduce using rule 15 (statement -> PRINT repeated_print .)
     END             reduce using rule 15 (statement -> PRINT repeated_print .)
     RETURN          reduce using rule 15 (statement -> PRINT repeated_print .)
     LOOP            reduce using rule 15 (statement -> PRINT repeated_print .)
@@ -769,11 +769,11 @@ state 35
     (16) statement -> . FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
     (17) statement -> . WHILE expression block LOOP
     (18) statement -> . DO block LOOP WHILE expression
-    (19) statement -> . LET IDENTIFIER repeated_size EQUALS expression
-    (20) statement -> . IF expression THEN block ELSE block END IF
-    (21) statement -> . GOSUB LABEL
-    (22) statement -> . GOTO LABEL
-    (23) statement -> . LABEL_SALTO
+    (19) statement -> . IF expression THEN block ELSE block END IF
+    (20) statement -> . GOSUB LABEL
+    (21) statement -> . GOTO LABEL
+    (22) statement -> . LABEL_SALTO
+    (23) statement -> . LET IDENTIFIER repeated_size EQUALS expression
 
     LOOP            reduce using rule 13 (block -> .)
     INPUT           shift and go to state 11
@@ -781,11 +781,11 @@ state 35
     FOR             shift and go to state 13
     WHILE           shift and go to state 14
     DO              shift and go to state 15
-    LET             shift and go to state 16
-    IF              shift and go to state 17
-    GOSUB           shift and go to state 18
-    GOTO            shift and go to state 19
-    LABEL_SALTO     shift and go to state 20
+    IF              shift and go to state 16
+    GOSUB           shift and go to state 17
+    GOTO            shift and go to state 18
+    LABEL_SALTO     shift and go to state 19
+    LET             shift and go to state 20
 
     block                          shift and go to state 57
     statement                      shift and go to state 10
@@ -803,11 +803,11 @@ state 36
     FOR             reduce using rule 31 (expression -> expression_s .)
     WHILE           reduce using rule 31 (expression -> expression_s .)
     DO              reduce using rule 31 (expression -> expression_s .)
-    LET             reduce using rule 31 (expression -> expression_s .)
     IF              reduce using rule 31 (expression -> expression_s .)
     GOSUB           reduce using rule 31 (expression -> expression_s .)
     GOTO            reduce using rule 31 (expression -> expression_s .)
     LABEL_SALTO     reduce using rule 31 (expression -> expression_s .)
+    LET             reduce using rule 31 (expression -> expression_s .)
     LOOP            reduce using rule 31 (expression -> expression_s .)
     THEN            reduce using rule 31 (expression -> expression_s .)
     CLOSEPAR        reduce using rule 31 (expression -> expression_s .)
@@ -836,11 +836,11 @@ state 37
     FOR             reduce using rule 32 (expression_s -> term .)
     WHILE           reduce using rule 32 (expression_s -> term .)
     DO              reduce using rule 32 (expression_s -> term .)
-    LET             reduce using rule 32 (expression_s -> term .)
     IF              reduce using rule 32 (expression_s -> term .)
     GOSUB           reduce using rule 32 (expression_s -> term .)
     GOTO            reduce using rule 32 (expression_s -> term .)
     LABEL_SALTO     reduce using rule 32 (expression_s -> term .)
+    LET             reduce using rule 32 (expression_s -> term .)
     LOOP            reduce using rule 32 (expression_s -> term .)
     THEN            reduce using rule 32 (expression_s -> term .)
     CLOSEPAR        reduce using rule 32 (expression_s -> term .)
@@ -871,11 +871,11 @@ state 38
     FOR             reduce using rule 36 (term -> factor .)
     WHILE           reduce using rule 36 (term -> factor .)
     DO              reduce using rule 36 (term -> factor .)
-    LET             reduce using rule 36 (term -> factor .)
     IF              reduce using rule 36 (term -> factor .)
     GOSUB           reduce using rule 36 (term -> factor .)
     GOTO            reduce using rule 36 (term -> factor .)
     LABEL_SALTO     reduce using rule 36 (term -> factor .)
+    LET             reduce using rule 36 (term -> factor .)
     LOOP            reduce using rule 36 (term -> factor .)
     THEN            reduce using rule 36 (term -> factor .)
     CLOSEPAR        reduce using rule 36 (term -> factor .)
@@ -906,11 +906,11 @@ state 39
     FOR             reduce using rule 40 (factor -> elem .)
     WHILE           reduce using rule 40 (factor -> elem .)
     DO              reduce using rule 40 (factor -> elem .)
-    LET             reduce using rule 40 (factor -> elem .)
     IF              reduce using rule 40 (factor -> elem .)
     GOSUB           reduce using rule 40 (factor -> elem .)
     GOTO            reduce using rule 40 (factor -> elem .)
     LABEL_SALTO     reduce using rule 40 (factor -> elem .)
+    LET             reduce using rule 40 (factor -> elem .)
     LOOP            reduce using rule 40 (factor -> elem .)
     THEN            reduce using rule 40 (factor -> elem .)
     CLOSEPAR        reduce using rule 40 (factor -> elem .)
@@ -959,7 +959,56 @@ state 41
 
 state 42
 
-    (19) statement -> LET IDENTIFIER . repeated_size EQUALS expression
+    (19) statement -> IF expression . THEN block ELSE block END IF
+
+    THEN            shift and go to state 70
+
+
+state 43
+
+    (20) statement -> GOSUB LABEL .
+
+    INPUT           reduce using rule 20 (statement -> GOSUB LABEL .)
+    PRINT           reduce using rule 20 (statement -> GOSUB LABEL .)
+    FOR             reduce using rule 20 (statement -> GOSUB LABEL .)
+    WHILE           reduce using rule 20 (statement -> GOSUB LABEL .)
+    DO              reduce using rule 20 (statement -> GOSUB LABEL .)
+    IF              reduce using rule 20 (statement -> GOSUB LABEL .)
+    GOSUB           reduce using rule 20 (statement -> GOSUB LABEL .)
+    GOTO            reduce using rule 20 (statement -> GOSUB LABEL .)
+    LABEL_SALTO     reduce using rule 20 (statement -> GOSUB LABEL .)
+    LET             reduce using rule 20 (statement -> GOSUB LABEL .)
+    END             reduce using rule 20 (statement -> GOSUB LABEL .)
+    RETURN          reduce using rule 20 (statement -> GOSUB LABEL .)
+    LOOP            reduce using rule 20 (statement -> GOSUB LABEL .)
+    ELSE            reduce using rule 20 (statement -> GOSUB LABEL .)
+    NEXT            reduce using rule 20 (statement -> GOSUB LABEL .)
+
+
+state 44
+
+    (21) statement -> GOTO LABEL .
+
+    INPUT           reduce using rule 21 (statement -> GOTO LABEL .)
+    PRINT           reduce using rule 21 (statement -> GOTO LABEL .)
+    FOR             reduce using rule 21 (statement -> GOTO LABEL .)
+    WHILE           reduce using rule 21 (statement -> GOTO LABEL .)
+    DO              reduce using rule 21 (statement -> GOTO LABEL .)
+    IF              reduce using rule 21 (statement -> GOTO LABEL .)
+    GOSUB           reduce using rule 21 (statement -> GOTO LABEL .)
+    GOTO            reduce using rule 21 (statement -> GOTO LABEL .)
+    LABEL_SALTO     reduce using rule 21 (statement -> GOTO LABEL .)
+    LET             reduce using rule 21 (statement -> GOTO LABEL .)
+    END             reduce using rule 21 (statement -> GOTO LABEL .)
+    RETURN          reduce using rule 21 (statement -> GOTO LABEL .)
+    LOOP            reduce using rule 21 (statement -> GOTO LABEL .)
+    ELSE            reduce using rule 21 (statement -> GOTO LABEL .)
+    NEXT            reduce using rule 21 (statement -> GOTO LABEL .)
+
+
+state 45
+
+    (23) statement -> LET IDENTIFIER . repeated_size EQUALS expression
     (5) repeated_size -> . SIZE repeated_size
     (6) repeated_size -> . SIZE_ID repeated_size
     (7) repeated_size -> .
@@ -968,56 +1017,7 @@ state 42
     SIZE_ID         shift and go to state 55
     EQUALS          reduce using rule 7 (repeated_size -> .)
 
-    repeated_size                  shift and go to state 70
-
-state 43
-
-    (20) statement -> IF expression . THEN block ELSE block END IF
-
-    THEN            shift and go to state 71
-
-
-state 44
-
-    (21) statement -> GOSUB LABEL .
-
-    INPUT           reduce using rule 21 (statement -> GOSUB LABEL .)
-    PRINT           reduce using rule 21 (statement -> GOSUB LABEL .)
-    FOR             reduce using rule 21 (statement -> GOSUB LABEL .)
-    WHILE           reduce using rule 21 (statement -> GOSUB LABEL .)
-    DO              reduce using rule 21 (statement -> GOSUB LABEL .)
-    LET             reduce using rule 21 (statement -> GOSUB LABEL .)
-    IF              reduce using rule 21 (statement -> GOSUB LABEL .)
-    GOSUB           reduce using rule 21 (statement -> GOSUB LABEL .)
-    GOTO            reduce using rule 21 (statement -> GOSUB LABEL .)
-    LABEL_SALTO     reduce using rule 21 (statement -> GOSUB LABEL .)
-    END             reduce using rule 21 (statement -> GOSUB LABEL .)
-    RETURN          reduce using rule 21 (statement -> GOSUB LABEL .)
-    LOOP            reduce using rule 21 (statement -> GOSUB LABEL .)
-    ELSE            reduce using rule 21 (statement -> GOSUB LABEL .)
-    NEXT            reduce using rule 21 (statement -> GOSUB LABEL .)
-
-
-state 45
-
-    (22) statement -> GOTO LABEL .
-
-    INPUT           reduce using rule 22 (statement -> GOTO LABEL .)
-    PRINT           reduce using rule 22 (statement -> GOTO LABEL .)
-    FOR             reduce using rule 22 (statement -> GOTO LABEL .)
-    WHILE           reduce using rule 22 (statement -> GOTO LABEL .)
-    DO              reduce using rule 22 (statement -> GOTO LABEL .)
-    LET             reduce using rule 22 (statement -> GOTO LABEL .)
-    IF              reduce using rule 22 (statement -> GOTO LABEL .)
-    GOSUB           reduce using rule 22 (statement -> GOTO LABEL .)
-    GOTO            reduce using rule 22 (statement -> GOTO LABEL .)
-    LABEL_SALTO     reduce using rule 22 (statement -> GOTO LABEL .)
-    END             reduce using rule 22 (statement -> GOTO LABEL .)
-    RETURN          reduce using rule 22 (statement -> GOTO LABEL .)
-    LOOP            reduce using rule 22 (statement -> GOTO LABEL .)
-    ELSE            reduce using rule 22 (statement -> GOTO LABEL .)
-    NEXT            reduce using rule 22 (statement -> GOTO LABEL .)
-
+    repeated_size                  shift and go to state 71
 
 state 46
 
@@ -1031,11 +1031,11 @@ state 46
     FOR             reduce using rule 25 (procedure -> .)
     WHILE           reduce using rule 25 (procedure -> .)
     DO              reduce using rule 25 (procedure -> .)
-    LET             reduce using rule 25 (procedure -> .)
     IF              reduce using rule 25 (procedure -> .)
     GOSUB           reduce using rule 25 (procedure -> .)
     GOTO            reduce using rule 25 (procedure -> .)
     LABEL_SALTO     reduce using rule 25 (procedure -> .)
+    LET             reduce using rule 25 (procedure -> .)
     END             reduce using rule 25 (procedure -> .)
 
     procedure                      shift and go to state 72
@@ -1056,11 +1056,11 @@ state 47
     FOR             reduce using rule 7 (repeated_size -> .)
     WHILE           reduce using rule 7 (repeated_size -> .)
     DO              reduce using rule 7 (repeated_size -> .)
-    LET             reduce using rule 7 (repeated_size -> .)
     IF              reduce using rule 7 (repeated_size -> .)
     GOSUB           reduce using rule 7 (repeated_size -> .)
     GOTO            reduce using rule 7 (repeated_size -> .)
     LABEL_SALTO     reduce using rule 7 (repeated_size -> .)
+    LET             reduce using rule 7 (repeated_size -> .)
     END             reduce using rule 7 (repeated_size -> .)
 
     repeated_size                  shift and go to state 73
@@ -1079,11 +1079,11 @@ state 48
     FOR             reduce using rule 4 (var -> .)
     WHILE           reduce using rule 4 (var -> .)
     DO              reduce using rule 4 (var -> .)
-    LET             reduce using rule 4 (var -> .)
     IF              reduce using rule 4 (var -> .)
     GOSUB           reduce using rule 4 (var -> .)
     GOTO            reduce using rule 4 (var -> .)
     LABEL_SALTO     reduce using rule 4 (var -> .)
+    LET             reduce using rule 4 (var -> .)
     END             reduce using rule 4 (var -> .)
 
     var                            shift and go to state 74
@@ -1101,11 +1101,11 @@ state 49
     FOR             reduce using rule 10 (type -> INT_TYPE .)
     WHILE           reduce using rule 10 (type -> INT_TYPE .)
     DO              reduce using rule 10 (type -> INT_TYPE .)
-    LET             reduce using rule 10 (type -> INT_TYPE .)
     IF              reduce using rule 10 (type -> INT_TYPE .)
     GOSUB           reduce using rule 10 (type -> INT_TYPE .)
     GOTO            reduce using rule 10 (type -> INT_TYPE .)
     LABEL_SALTO     reduce using rule 10 (type -> INT_TYPE .)
+    LET             reduce using rule 10 (type -> INT_TYPE .)
     END             reduce using rule 10 (type -> INT_TYPE .)
 
 
@@ -1122,11 +1122,11 @@ state 50
     FOR             reduce using rule 11 (type -> FLOAT_TYPE .)
     WHILE           reduce using rule 11 (type -> FLOAT_TYPE .)
     DO              reduce using rule 11 (type -> FLOAT_TYPE .)
-    LET             reduce using rule 11 (type -> FLOAT_TYPE .)
     IF              reduce using rule 11 (type -> FLOAT_TYPE .)
     GOSUB           reduce using rule 11 (type -> FLOAT_TYPE .)
     GOTO            reduce using rule 11 (type -> FLOAT_TYPE .)
     LABEL_SALTO     reduce using rule 11 (type -> FLOAT_TYPE .)
+    LET             reduce using rule 11 (type -> FLOAT_TYPE .)
     END             reduce using rule 11 (type -> FLOAT_TYPE .)
 
 
@@ -1167,11 +1167,11 @@ state 53
     FOR             reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
     WHILE           reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
     DO              reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
-    LET             reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
     IF              reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
     GOSUB           reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
     GOTO            reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
     LABEL_SALTO     reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
+    LET             reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
     END             reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
     RETURN          reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
     LOOP            reduce using rule 44 (elem -> IDENTIFIER repeated_size .)
@@ -1205,11 +1205,11 @@ state 54
     FOR             reduce using rule 7 (repeated_size -> .)
     WHILE           reduce using rule 7 (repeated_size -> .)
     DO              reduce using rule 7 (repeated_size -> .)
-    LET             reduce using rule 7 (repeated_size -> .)
     IF              reduce using rule 7 (repeated_size -> .)
     GOSUB           reduce using rule 7 (repeated_size -> .)
     GOTO            reduce using rule 7 (repeated_size -> .)
     LABEL_SALTO     reduce using rule 7 (repeated_size -> .)
+    LET             reduce using rule 7 (repeated_size -> .)
     END             reduce using rule 7 (repeated_size -> .)
     RETURN          reduce using rule 7 (repeated_size -> .)
     LOOP            reduce using rule 7 (repeated_size -> .)
@@ -1247,11 +1247,11 @@ state 55
     FOR             reduce using rule 7 (repeated_size -> .)
     WHILE           reduce using rule 7 (repeated_size -> .)
     DO              reduce using rule 7 (repeated_size -> .)
-    LET             reduce using rule 7 (repeated_size -> .)
     IF              reduce using rule 7 (repeated_size -> .)
     GOSUB           reduce using rule 7 (repeated_size -> .)
     GOTO            reduce using rule 7 (repeated_size -> .)
     LABEL_SALTO     reduce using rule 7 (repeated_size -> .)
+    LET             reduce using rule 7 (repeated_size -> .)
     END             reduce using rule 7 (repeated_size -> .)
     RETURN          reduce using rule 7 (repeated_size -> .)
     LOOP            reduce using rule 7 (repeated_size -> .)
@@ -1508,14 +1508,7 @@ state 69
 
 state 70
 
-    (19) statement -> LET IDENTIFIER repeated_size . EQUALS expression
-
-    EQUALS          shift and go to state 89
-
-
-state 71
-
-    (20) statement -> IF expression THEN . block ELSE block END IF
+    (19) statement -> IF expression THEN . block ELSE block END IF
     (12) block -> . statement block
     (13) block -> .
     (14) statement -> . INPUT repeated_print
@@ -1523,11 +1516,11 @@ state 71
     (16) statement -> . FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
     (17) statement -> . WHILE expression block LOOP
     (18) statement -> . DO block LOOP WHILE expression
-    (19) statement -> . LET IDENTIFIER repeated_size EQUALS expression
-    (20) statement -> . IF expression THEN block ELSE block END IF
-    (21) statement -> . GOSUB LABEL
-    (22) statement -> . GOTO LABEL
-    (23) statement -> . LABEL_SALTO
+    (19) statement -> . IF expression THEN block ELSE block END IF
+    (20) statement -> . GOSUB LABEL
+    (21) statement -> . GOTO LABEL
+    (22) statement -> . LABEL_SALTO
+    (23) statement -> . LET IDENTIFIER repeated_size EQUALS expression
 
     ELSE            reduce using rule 13 (block -> .)
     INPUT           shift and go to state 11
@@ -1535,14 +1528,21 @@ state 71
     FOR             shift and go to state 13
     WHILE           shift and go to state 14
     DO              shift and go to state 15
-    LET             shift and go to state 16
-    IF              shift and go to state 17
-    GOSUB           shift and go to state 18
-    GOTO            shift and go to state 19
-    LABEL_SALTO     shift and go to state 20
+    IF              shift and go to state 16
+    GOSUB           shift and go to state 17
+    GOTO            shift and go to state 18
+    LABEL_SALTO     shift and go to state 19
+    LET             shift and go to state 20
 
-    block                          shift and go to state 90
+    block                          shift and go to state 89
     statement                      shift and go to state 10
+
+state 71
+
+    (23) statement -> LET IDENTIFIER repeated_size . EQUALS expression
+
+    EQUALS          shift and go to state 90
+
 
 state 72
 
@@ -1553,11 +1553,11 @@ state 72
     FOR             reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
     WHILE           reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
     DO              reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
-    LET             reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
     IF              reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
     GOSUB           reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
     GOTO            reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
     LABEL_SALTO     reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
+    LET             reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
     END             reduce using rule 24 (procedure -> LABEL block RETURN procedure .)
 
 
@@ -1575,11 +1575,11 @@ state 73
     FOR             reduce using rule 4 (var -> .)
     WHILE           reduce using rule 4 (var -> .)
     DO              reduce using rule 4 (var -> .)
-    LET             reduce using rule 4 (var -> .)
     IF              reduce using rule 4 (var -> .)
     GOSUB           reduce using rule 4 (var -> .)
     GOTO            reduce using rule 4 (var -> .)
     LABEL_SALTO     reduce using rule 4 (var -> .)
+    LET             reduce using rule 4 (var -> .)
     END             reduce using rule 4 (var -> .)
 
     var                            shift and go to state 91
@@ -1594,11 +1594,11 @@ state 74
     FOR             reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
     WHILE           reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
     DO              reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
-    LET             reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
     IF              reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
     GOSUB           reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
     GOTO            reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
     LABEL_SALTO     reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
+    LET             reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
     END             reduce using rule 3 (var -> DIM repeated_identifier AS STRING_TYPE var .)
 
 
@@ -1611,11 +1611,11 @@ state 75
     FOR             reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
     WHILE           reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
     DO              reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
-    LET             reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
     IF              reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
     GOSUB           reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
     GOTO            reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
     LABEL_SALTO     reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
+    LET             reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
     END             reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
     RETURN          reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
     LOOP            reduce using rule 26 (repeated_print -> repeated_elem COMMA repeated_print .)
@@ -1633,11 +1633,11 @@ state 76
     FOR             reduce using rule 5 (repeated_size -> SIZE repeated_size .)
     WHILE           reduce using rule 5 (repeated_size -> SIZE repeated_size .)
     DO              reduce using rule 5 (repeated_size -> SIZE repeated_size .)
-    LET             reduce using rule 5 (repeated_size -> SIZE repeated_size .)
     IF              reduce using rule 5 (repeated_size -> SIZE repeated_size .)
     GOSUB           reduce using rule 5 (repeated_size -> SIZE repeated_size .)
     GOTO            reduce using rule 5 (repeated_size -> SIZE repeated_size .)
     LABEL_SALTO     reduce using rule 5 (repeated_size -> SIZE repeated_size .)
+    LET             reduce using rule 5 (repeated_size -> SIZE repeated_size .)
     END             reduce using rule 5 (repeated_size -> SIZE repeated_size .)
     RETURN          reduce using rule 5 (repeated_size -> SIZE repeated_size .)
     LOOP            reduce using rule 5 (repeated_size -> SIZE repeated_size .)
@@ -1669,11 +1669,11 @@ state 77
     FOR             reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
     WHILE           reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
     DO              reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
-    LET             reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
     IF              reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
     GOSUB           reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
     GOTO            reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
     LABEL_SALTO     reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
+    LET             reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
     END             reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
     RETURN          reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
     LOOP            reduce using rule 6 (repeated_size -> SIZE_ID repeated_size .)
@@ -1711,11 +1711,11 @@ state 79
     FOR             reduce using rule 17 (statement -> WHILE expression block LOOP .)
     WHILE           reduce using rule 17 (statement -> WHILE expression block LOOP .)
     DO              reduce using rule 17 (statement -> WHILE expression block LOOP .)
-    LET             reduce using rule 17 (statement -> WHILE expression block LOOP .)
     IF              reduce using rule 17 (statement -> WHILE expression block LOOP .)
     GOSUB           reduce using rule 17 (statement -> WHILE expression block LOOP .)
     GOTO            reduce using rule 17 (statement -> WHILE expression block LOOP .)
     LABEL_SALTO     reduce using rule 17 (statement -> WHILE expression block LOOP .)
+    LET             reduce using rule 17 (statement -> WHILE expression block LOOP .)
     END             reduce using rule 17 (statement -> WHILE expression block LOOP .)
     RETURN          reduce using rule 17 (statement -> WHILE expression block LOOP .)
     LOOP            reduce using rule 17 (statement -> WHILE expression block LOOP .)
@@ -1732,11 +1732,11 @@ state 80
     FOR             reduce using rule 30 (expression -> expression_s op_rel expression_s .)
     WHILE           reduce using rule 30 (expression -> expression_s op_rel expression_s .)
     DO              reduce using rule 30 (expression -> expression_s op_rel expression_s .)
-    LET             reduce using rule 30 (expression -> expression_s op_rel expression_s .)
     IF              reduce using rule 30 (expression -> expression_s op_rel expression_s .)
     GOSUB           reduce using rule 30 (expression -> expression_s op_rel expression_s .)
     GOTO            reduce using rule 30 (expression -> expression_s op_rel expression_s .)
     LABEL_SALTO     reduce using rule 30 (expression -> expression_s op_rel expression_s .)
+    LET             reduce using rule 30 (expression -> expression_s op_rel expression_s .)
     LOOP            reduce using rule 30 (expression -> expression_s op_rel expression_s .)
     THEN            reduce using rule 30 (expression -> expression_s op_rel expression_s .)
     CLOSEPAR        reduce using rule 30 (expression -> expression_s op_rel expression_s .)
@@ -1758,11 +1758,11 @@ state 81
     FOR             reduce using rule 33 (expression_s -> term PLUS expression_s .)
     WHILE           reduce using rule 33 (expression_s -> term PLUS expression_s .)
     DO              reduce using rule 33 (expression_s -> term PLUS expression_s .)
-    LET             reduce using rule 33 (expression_s -> term PLUS expression_s .)
     IF              reduce using rule 33 (expression_s -> term PLUS expression_s .)
     GOSUB           reduce using rule 33 (expression_s -> term PLUS expression_s .)
     GOTO            reduce using rule 33 (expression_s -> term PLUS expression_s .)
     LABEL_SALTO     reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    LET             reduce using rule 33 (expression_s -> term PLUS expression_s .)
     LOOP            reduce using rule 33 (expression_s -> term PLUS expression_s .)
     THEN            reduce using rule 33 (expression_s -> term PLUS expression_s .)
     CLOSEPAR        reduce using rule 33 (expression_s -> term PLUS expression_s .)
@@ -1784,11 +1784,11 @@ state 82
     FOR             reduce using rule 34 (expression_s -> term MINUS expression_s .)
     WHILE           reduce using rule 34 (expression_s -> term MINUS expression_s .)
     DO              reduce using rule 34 (expression_s -> term MINUS expression_s .)
-    LET             reduce using rule 34 (expression_s -> term MINUS expression_s .)
     IF              reduce using rule 34 (expression_s -> term MINUS expression_s .)
     GOSUB           reduce using rule 34 (expression_s -> term MINUS expression_s .)
     GOTO            reduce using rule 34 (expression_s -> term MINUS expression_s .)
     LABEL_SALTO     reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    LET             reduce using rule 34 (expression_s -> term MINUS expression_s .)
     LOOP            reduce using rule 34 (expression_s -> term MINUS expression_s .)
     THEN            reduce using rule 34 (expression_s -> term MINUS expression_s .)
     CLOSEPAR        reduce using rule 34 (expression_s -> term MINUS expression_s .)
@@ -1810,11 +1810,11 @@ state 83
     FOR             reduce using rule 35 (expression_s -> term OR expression_s .)
     WHILE           reduce using rule 35 (expression_s -> term OR expression_s .)
     DO              reduce using rule 35 (expression_s -> term OR expression_s .)
-    LET             reduce using rule 35 (expression_s -> term OR expression_s .)
     IF              reduce using rule 35 (expression_s -> term OR expression_s .)
     GOSUB           reduce using rule 35 (expression_s -> term OR expression_s .)
     GOTO            reduce using rule 35 (expression_s -> term OR expression_s .)
     LABEL_SALTO     reduce using rule 35 (expression_s -> term OR expression_s .)
+    LET             reduce using rule 35 (expression_s -> term OR expression_s .)
     LOOP            reduce using rule 35 (expression_s -> term OR expression_s .)
     THEN            reduce using rule 35 (expression_s -> term OR expression_s .)
     CLOSEPAR        reduce using rule 35 (expression_s -> term OR expression_s .)
@@ -1839,11 +1839,11 @@ state 84
     FOR             reduce using rule 37 (term -> factor MULTIPLY term .)
     WHILE           reduce using rule 37 (term -> factor MULTIPLY term .)
     DO              reduce using rule 37 (term -> factor MULTIPLY term .)
-    LET             reduce using rule 37 (term -> factor MULTIPLY term .)
     IF              reduce using rule 37 (term -> factor MULTIPLY term .)
     GOSUB           reduce using rule 37 (term -> factor MULTIPLY term .)
     GOTO            reduce using rule 37 (term -> factor MULTIPLY term .)
     LABEL_SALTO     reduce using rule 37 (term -> factor MULTIPLY term .)
+    LET             reduce using rule 37 (term -> factor MULTIPLY term .)
     LOOP            reduce using rule 37 (term -> factor MULTIPLY term .)
     THEN            reduce using rule 37 (term -> factor MULTIPLY term .)
     CLOSEPAR        reduce using rule 37 (term -> factor MULTIPLY term .)
@@ -1868,11 +1868,11 @@ state 85
     FOR             reduce using rule 38 (term -> factor DIVIDE term .)
     WHILE           reduce using rule 38 (term -> factor DIVIDE term .)
     DO              reduce using rule 38 (term -> factor DIVIDE term .)
-    LET             reduce using rule 38 (term -> factor DIVIDE term .)
     IF              reduce using rule 38 (term -> factor DIVIDE term .)
     GOSUB           reduce using rule 38 (term -> factor DIVIDE term .)
     GOTO            reduce using rule 38 (term -> factor DIVIDE term .)
     LABEL_SALTO     reduce using rule 38 (term -> factor DIVIDE term .)
+    LET             reduce using rule 38 (term -> factor DIVIDE term .)
     LOOP            reduce using rule 38 (term -> factor DIVIDE term .)
     THEN            reduce using rule 38 (term -> factor DIVIDE term .)
     CLOSEPAR        reduce using rule 38 (term -> factor DIVIDE term .)
@@ -1897,11 +1897,11 @@ state 86
     FOR             reduce using rule 39 (term -> factor AND term .)
     WHILE           reduce using rule 39 (term -> factor AND term .)
     DO              reduce using rule 39 (term -> factor AND term .)
-    LET             reduce using rule 39 (term -> factor AND term .)
     IF              reduce using rule 39 (term -> factor AND term .)
     GOSUB           reduce using rule 39 (term -> factor AND term .)
     GOTO            reduce using rule 39 (term -> factor AND term .)
     LABEL_SALTO     reduce using rule 39 (term -> factor AND term .)
+    LET             reduce using rule 39 (term -> factor AND term .)
     LOOP            reduce using rule 39 (term -> factor AND term .)
     THEN            reduce using rule 39 (term -> factor AND term .)
     CLOSEPAR        reduce using rule 39 (term -> factor AND term .)
@@ -1929,11 +1929,11 @@ state 87
     FOR             reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
     WHILE           reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
     DO              reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
-    LET             reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
     IF              reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
     GOSUB           reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
     GOTO            reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
     LABEL_SALTO     reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    LET             reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
     LOOP            reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
     THEN            reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
     CLOSEPAR        reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
@@ -1975,7 +1975,14 @@ state 88
 
 state 89
 
-    (19) statement -> LET IDENTIFIER repeated_size EQUALS . expression
+    (19) statement -> IF expression THEN block . ELSE block END IF
+
+    ELSE            shift and go to state 94
+
+
+state 90
+
+    (23) statement -> LET IDENTIFIER repeated_size EQUALS . expression
     (30) expression -> . expression_s op_rel expression_s
     (31) expression -> . expression_s
     (32) expression_s -> . term
@@ -1997,18 +2004,11 @@ state 89
     FLOAT           shift and go to state 31
     IDENTIFIER      shift and go to state 32
 
-    expression                     shift and go to state 94
+    expression                     shift and go to state 95
     expression_s                   shift and go to state 36
     term                           shift and go to state 37
     factor                         shift and go to state 38
     elem                           shift and go to state 39
-
-state 90
-
-    (20) statement -> IF expression THEN block . ELSE block END IF
-
-    ELSE            shift and go to state 95
-
 
 state 91
 
@@ -2020,11 +2020,11 @@ state 91
     FOR             reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
     WHILE           reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
     DO              reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
-    LET             reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
     IF              reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
     GOSUB           reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
     GOTO            reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
     LABEL_SALTO     reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
+    LET             reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
     END             reduce using rule 2 (var -> DIM repeated_identifier AS type repeated_size var .)
 
 
@@ -2044,11 +2044,11 @@ state 93
     FOR             reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
     WHILE           reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
     DO              reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
-    LET             reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
     IF              reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
     GOSUB           reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
     GOTO            reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
     LABEL_SALTO     reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
+    LET             reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
     END             reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
     RETURN          reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
     LOOP            reduce using rule 18 (statement -> DO block LOOP WHILE expression .)
@@ -2058,28 +2058,7 @@ state 93
 
 state 94
 
-    (19) statement -> LET IDENTIFIER repeated_size EQUALS expression .
-
-    INPUT           reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    PRINT           reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    FOR             reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    WHILE           reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    DO              reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    LET             reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    IF              reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    GOSUB           reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    GOTO            reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    LABEL_SALTO     reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    END             reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    RETURN          reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    LOOP            reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    ELSE            reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-    NEXT            reduce using rule 19 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
-
-
-state 95
-
-    (20) statement -> IF expression THEN block ELSE . block END IF
+    (19) statement -> IF expression THEN block ELSE . block END IF
     (12) block -> . statement block
     (13) block -> .
     (14) statement -> . INPUT repeated_print
@@ -2087,11 +2066,11 @@ state 95
     (16) statement -> . FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
     (17) statement -> . WHILE expression block LOOP
     (18) statement -> . DO block LOOP WHILE expression
-    (19) statement -> . LET IDENTIFIER repeated_size EQUALS expression
-    (20) statement -> . IF expression THEN block ELSE block END IF
-    (21) statement -> . GOSUB LABEL
-    (22) statement -> . GOTO LABEL
-    (23) statement -> . LABEL_SALTO
+    (19) statement -> . IF expression THEN block ELSE block END IF
+    (20) statement -> . GOSUB LABEL
+    (21) statement -> . GOTO LABEL
+    (22) statement -> . LABEL_SALTO
+    (23) statement -> . LET IDENTIFIER repeated_size EQUALS expression
 
     END             reduce using rule 13 (block -> .)
     INPUT           shift and go to state 11
@@ -2099,14 +2078,35 @@ state 95
     FOR             shift and go to state 13
     WHILE           shift and go to state 14
     DO              shift and go to state 15
-    LET             shift and go to state 16
-    IF              shift and go to state 17
-    GOSUB           shift and go to state 18
-    GOTO            shift and go to state 19
-    LABEL_SALTO     shift and go to state 20
+    IF              shift and go to state 16
+    GOSUB           shift and go to state 17
+    GOTO            shift and go to state 18
+    LABEL_SALTO     shift and go to state 19
+    LET             shift and go to state 20
 
     block                          shift and go to state 97
     statement                      shift and go to state 10
+
+state 95
+
+    (23) statement -> LET IDENTIFIER repeated_size EQUALS expression .
+
+    INPUT           reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    PRINT           reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    FOR             reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    WHILE           reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    DO              reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    IF              reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    GOSUB           reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    GOTO            reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    LABEL_SALTO     reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    LET             reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    END             reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    RETURN          reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    LOOP            reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    ELSE            reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+    NEXT            reduce using rule 23 (statement -> LET IDENTIFIER repeated_size EQUALS expression .)
+
 
 state 96
 
@@ -2118,11 +2118,11 @@ state 96
     (16) statement -> . FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
     (17) statement -> . WHILE expression block LOOP
     (18) statement -> . DO block LOOP WHILE expression
-    (19) statement -> . LET IDENTIFIER repeated_size EQUALS expression
-    (20) statement -> . IF expression THEN block ELSE block END IF
-    (21) statement -> . GOSUB LABEL
-    (22) statement -> . GOTO LABEL
-    (23) statement -> . LABEL_SALTO
+    (19) statement -> . IF expression THEN block ELSE block END IF
+    (20) statement -> . GOSUB LABEL
+    (21) statement -> . GOTO LABEL
+    (22) statement -> . LABEL_SALTO
+    (23) statement -> . LET IDENTIFIER repeated_size EQUALS expression
 
     NEXT            reduce using rule 13 (block -> .)
     INPUT           shift and go to state 11
@@ -2130,18 +2130,18 @@ state 96
     FOR             shift and go to state 13
     WHILE           shift and go to state 14
     DO              shift and go to state 15
-    LET             shift and go to state 16
-    IF              shift and go to state 17
-    GOSUB           shift and go to state 18
-    GOTO            shift and go to state 19
-    LABEL_SALTO     shift and go to state 20
+    IF              shift and go to state 16
+    GOSUB           shift and go to state 17
+    GOTO            shift and go to state 18
+    LABEL_SALTO     shift and go to state 19
+    LET             shift and go to state 20
 
     block                          shift and go to state 98
     statement                      shift and go to state 10
 
 state 97
 
-    (20) statement -> IF expression THEN block ELSE block . END IF
+    (19) statement -> IF expression THEN block ELSE block . END IF
 
     END             shift and go to state 99
 
@@ -2155,7 +2155,7 @@ state 98
 
 state 99
 
-    (20) statement -> IF expression THEN block ELSE block END . IF
+    (19) statement -> IF expression THEN block ELSE block END . IF
 
     IF              shift and go to state 101
 
@@ -2169,23 +2169,23 @@ state 100
 
 state 101
 
-    (20) statement -> IF expression THEN block ELSE block END IF .
+    (19) statement -> IF expression THEN block ELSE block END IF .
 
-    INPUT           reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    PRINT           reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    FOR             reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    WHILE           reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    DO              reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    LET             reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    IF              reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    GOSUB           reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    GOTO            reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    LABEL_SALTO     reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    END             reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    RETURN          reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    LOOP            reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    ELSE            reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
-    NEXT            reduce using rule 20 (statement -> IF expression THEN block ELSE block END IF .)
+    INPUT           reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    PRINT           reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    FOR             reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    WHILE           reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    DO              reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    IF              reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    GOSUB           reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    GOTO            reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    LABEL_SALTO     reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    LET             reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    END             reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    RETURN          reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    LOOP            reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    ELSE            reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
+    NEXT            reduce using rule 19 (statement -> IF expression THEN block ELSE block END IF .)
 
 
 state 102
@@ -2197,11 +2197,11 @@ state 102
     FOR             reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     WHILE           reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     DO              reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
-    LET             reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     IF              reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     GOSUB           reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     GOTO            reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     LABEL_SALTO     reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
+    LET             reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     END             reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     RETURN          reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     LOOP            reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)

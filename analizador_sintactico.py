@@ -40,7 +40,8 @@ def p_repeated_identifier(p):
     repeated_identifier : IDENTIFIER COMMA repeated_identifier
                         | IDENTIFIER
     '''
-    pass
+    global env
+    env[p[1]] = None
 
 def p_var_type(p):
     '''
@@ -63,11 +64,16 @@ def p_statement(p):
         | FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
         | WHILE expression block LOOP
         | DO block LOOP WHILE expression
-        | LET IDENTIFIER repeated_size EQUALS expression
         | IF expression THEN block ELSE block END IF
         | GOSUB LABEL
         | GOTO LABEL
         | LABEL_SALTO
+    '''
+    pass
+
+def p_statement_assignment(p):
+    '''
+    statement : LET IDENTIFIER repeated_size EQUALS expression
     '''
     pass
 
@@ -156,3 +162,4 @@ try:
 except EOFError:
     quit()
 parser.parse(s)
+print(env)
