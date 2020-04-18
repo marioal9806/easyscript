@@ -96,6 +96,7 @@ def t_SIZE(t):
 def t_SIZE_ID(t):
     r'\[[a-zA-Z_][a-zA-Z0-9_]*\]'
     t.type = 'SIZE_ID'
+    t.value = t.value.lstrip('\[').rstrip('\]')
     return t
 
 def t_STRING(t):
