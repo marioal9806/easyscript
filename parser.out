@@ -47,10 +47,9 @@ Rule 41    factor -> OPENPAR expression CLOSEPAR
 Rule 42    elem -> INT
 Rule 43    elem -> FLOAT
 Rule 44    elem -> IDENTIFIER repeated_size
-Rule 45    elem -> IDENTIFIER
-Rule 46    op_rel -> LESSTHAN
-Rule 47    op_rel -> GREATERTHAN
-Rule 48    op_rel -> ISEQUALTO
+Rule 45    op_rel -> LESSTHAN
+Rule 46    op_rel -> GREATERTHAN
+Rule 47    op_rel -> ISEQUALTO
 
 Terminals, with rules where they appear
 
@@ -69,16 +68,16 @@ FLOAT_TYPE           : 11
 FOR                  : 16
 GOSUB                : 21
 GOTO                 : 22
-GREATERTHAN          : 47
-IDENTIFIER           : 8 9 16 16 19 44 45
+GREATERTHAN          : 46
+IDENTIFIER           : 8 9 16 16 19 44
 IF                   : 20 20
 INPUT                : 14
 INT                  : 16 16 42
 INT_TYPE             : 10
-ISEQUALTO            : 48
+ISEQUALTO            : 47
 LABEL                : 21 22 24
 LABEL_SALTO          : 23
-LESSTHAN             : 46
+LESSTHAN             : 45
 LET                  : 19
 LOOP                 : 17 18
 MINUS                : 34
@@ -321,7 +320,6 @@ state 11
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     STRING          shift and go to state 28
     INT             shift and go to state 30
@@ -342,7 +340,6 @@ state 12
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     STRING          shift and go to state 28
     INT             shift and go to state 30
@@ -378,7 +375,6 @@ state 14
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -447,7 +443,6 @@ state 17
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -700,38 +695,10 @@ state 31
 state 32
 
     (44) elem -> IDENTIFIER . repeated_size
-    (45) elem -> IDENTIFIER .
     (5) repeated_size -> . SIZE repeated_size
     (6) repeated_size -> . SIZE_ID repeated_size
     (7) repeated_size -> .
 
-  ! reduce/reduce conflict for COMMA resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for INPUT resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for PRINT resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for FOR resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for WHILE resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for DO resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for LET resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for IF resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for GOSUB resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for GOTO resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for LABEL_SALTO resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for END resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for RETURN resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for LOOP resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for ELSE resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for NEXT resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for MULTIPLY resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for DIVIDE resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for AND resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for PLUS resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for MINUS resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for OR resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for LESSTHAN resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for GREATERTHAN resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for ISEQUALTO resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for THEN resolved using rule 7 (repeated_size -> .)
-  ! reduce/reduce conflict for CLOSEPAR resolved using rule 7 (repeated_size -> .)
     SIZE            shift and go to state 54
     SIZE_ID         shift and go to state 55
     COMMA           reduce using rule 7 (repeated_size -> .)
@@ -761,34 +728,6 @@ state 32
     ISEQUALTO       reduce using rule 7 (repeated_size -> .)
     THEN            reduce using rule 7 (repeated_size -> .)
     CLOSEPAR        reduce using rule 7 (repeated_size -> .)
-
-  ! COMMA           [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! INPUT           [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! PRINT           [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! FOR             [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! WHILE           [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! DO              [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! LET             [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! IF              [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! GOSUB           [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! GOTO            [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! LABEL_SALTO     [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! END             [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! RETURN          [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! LOOP            [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! ELSE            [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! NEXT            [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! MULTIPLY        [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! DIVIDE          [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! AND             [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! PLUS            [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! MINUS           [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! OR              [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! LESSTHAN        [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! GREATERTHAN     [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! ISEQUALTO       [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! THEN            [ reduce using rule 45 (elem -> IDENTIFIER .) ]
-  ! CLOSEPAR        [ reduce using rule 45 (elem -> IDENTIFIER .) ]
 
     repeated_size                  shift and go to state 53
 
@@ -855,9 +794,9 @@ state 36
 
     (30) expression -> expression_s . op_rel expression_s
     (31) expression -> expression_s .
-    (46) op_rel -> . LESSTHAN
-    (47) op_rel -> . GREATERTHAN
-    (48) op_rel -> . ISEQUALTO
+    (45) op_rel -> . LESSTHAN
+    (46) op_rel -> . GREATERTHAN
+    (47) op_rel -> . ISEQUALTO
 
     INPUT           reduce using rule 31 (expression -> expression_s .)
     PRINT           reduce using rule 31 (expression -> expression_s .)
@@ -999,7 +938,6 @@ state 40
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -1209,7 +1147,6 @@ state 52
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     STRING          shift and go to state 28
     INT             shift and go to state 30
@@ -1367,7 +1304,6 @@ state 58
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -1381,32 +1317,32 @@ state 58
 
 state 59
 
-    (46) op_rel -> LESSTHAN .
+    (45) op_rel -> LESSTHAN .
 
-    OPENPAR         reduce using rule 46 (op_rel -> LESSTHAN .)
-    INT             reduce using rule 46 (op_rel -> LESSTHAN .)
-    FLOAT           reduce using rule 46 (op_rel -> LESSTHAN .)
-    IDENTIFIER      reduce using rule 46 (op_rel -> LESSTHAN .)
+    OPENPAR         reduce using rule 45 (op_rel -> LESSTHAN .)
+    INT             reduce using rule 45 (op_rel -> LESSTHAN .)
+    FLOAT           reduce using rule 45 (op_rel -> LESSTHAN .)
+    IDENTIFIER      reduce using rule 45 (op_rel -> LESSTHAN .)
 
 
 state 60
 
-    (47) op_rel -> GREATERTHAN .
+    (46) op_rel -> GREATERTHAN .
 
-    OPENPAR         reduce using rule 47 (op_rel -> GREATERTHAN .)
-    INT             reduce using rule 47 (op_rel -> GREATERTHAN .)
-    FLOAT           reduce using rule 47 (op_rel -> GREATERTHAN .)
-    IDENTIFIER      reduce using rule 47 (op_rel -> GREATERTHAN .)
+    OPENPAR         reduce using rule 46 (op_rel -> GREATERTHAN .)
+    INT             reduce using rule 46 (op_rel -> GREATERTHAN .)
+    FLOAT           reduce using rule 46 (op_rel -> GREATERTHAN .)
+    IDENTIFIER      reduce using rule 46 (op_rel -> GREATERTHAN .)
 
 
 state 61
 
-    (48) op_rel -> ISEQUALTO .
+    (47) op_rel -> ISEQUALTO .
 
-    OPENPAR         reduce using rule 48 (op_rel -> ISEQUALTO .)
-    INT             reduce using rule 48 (op_rel -> ISEQUALTO .)
-    FLOAT           reduce using rule 48 (op_rel -> ISEQUALTO .)
-    IDENTIFIER      reduce using rule 48 (op_rel -> ISEQUALTO .)
+    OPENPAR         reduce using rule 47 (op_rel -> ISEQUALTO .)
+    INT             reduce using rule 47 (op_rel -> ISEQUALTO .)
+    FLOAT           reduce using rule 47 (op_rel -> ISEQUALTO .)
+    IDENTIFIER      reduce using rule 47 (op_rel -> ISEQUALTO .)
 
 
 state 62
@@ -1425,7 +1361,6 @@ state 62
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -1453,7 +1388,6 @@ state 63
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -1481,7 +1415,6 @@ state 64
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -1505,7 +1438,6 @@ state 65
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -1528,7 +1460,6 @@ state 66
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -1551,7 +1482,6 @@ state 67
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -2031,7 +1961,6 @@ state 88
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -2062,7 +1991,6 @@ state 89
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
-    (45) elem -> . IDENTIFIER
 
     OPENPAR         shift and go to state 40
     INT             shift and go to state 30
@@ -2280,9 +2208,3 @@ state 102
     ELSE            reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
     NEXT            reduce using rule 16 (statement -> FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER .)
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: reduce/reduce conflict in state 32 resolved using rule (repeated_size -> <empty>)
-WARNING: rejected rule (elem -> IDENTIFIER) in state 32
-WARNING: Rule (elem -> IDENTIFIER) is never reduced

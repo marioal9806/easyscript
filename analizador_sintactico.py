@@ -129,7 +129,6 @@ def p_elem_num(p):
     elem : INT
         | FLOAT
         | IDENTIFIER repeated_size
-        | IDENTIFIER 
     '''
     print(p)
 
