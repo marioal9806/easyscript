@@ -34,16 +34,16 @@ Rule 28    repeated_elem -> STRING
 Rule 29    repeated_elem -> elem
 Rule 30    expression -> expression_s op_rel expression_s
 Rule 31    expression -> expression_s
-Rule 32    expression_s -> expression_t
-Rule 33    expression_s -> expression_t PLUS expression_s
-Rule 34    expression_s -> expression_t MINUS expression_s
-Rule 35    expression_s -> expression_t OR expression_s
-Rule 36    expression_t -> expression_f
-Rule 37    expression_t -> expression_f MULTIPLY expression_t
-Rule 38    expression_t -> expression_f DIVIDE expression_t
-Rule 39    expression_t -> expression_f AND expression_t
-Rule 40    expression_f -> elem
-Rule 41    expression_f -> OPENPAR expression CLOSEPAR
+Rule 32    expression_s -> term
+Rule 33    expression_s -> term PLUS expression_s
+Rule 34    expression_s -> term MINUS expression_s
+Rule 35    expression_s -> term OR expression_s
+Rule 36    term -> factor
+Rule 37    term -> factor MULTIPLY term
+Rule 38    term -> factor DIVIDE term
+Rule 39    term -> factor AND term
+Rule 40    factor -> elem
+Rule 41    factor -> OPENPAR expression CLOSEPAR
 Rule 42    elem -> INT
 Rule 43    elem -> FLOAT
 Rule 44    elem -> IDENTIFIER repeated_size
@@ -104,9 +104,8 @@ Nonterminals, with rules where they appear
 block                : 1 12 16 17 18 20 20 24
 elem                 : 29 40
 expression           : 17 18 19 20 41
-expression_f         : 36 37 38 39
 expression_s         : 30 30 31 33 34 35
-expression_t         : 32 33 34 35 37 38 39
+factor               : 36 37 38 39
 op_rel               : 30
 procedure            : 1 24
 programa             : 0
@@ -115,6 +114,7 @@ repeated_identifier  : 2 3 8
 repeated_print       : 14 15 26
 repeated_size        : 2 5 6 19 44
 statement            : 12
+term                 : 32 33 34 35 37 38 39
 type                 : 2
 var                  : 1 2 3
 
@@ -365,16 +365,16 @@ state 14
     (17) statement -> WHILE . expression block LOOP
     (30) expression -> . expression_s op_rel expression_s
     (31) expression -> . expression_s
-    (32) expression_s -> . expression_t
-    (33) expression_s -> . expression_t PLUS expression_s
-    (34) expression_s -> . expression_t MINUS expression_s
-    (35) expression_s -> . expression_t OR expression_s
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (32) expression_s -> . term
+    (33) expression_s -> . term PLUS expression_s
+    (34) expression_s -> . term MINUS expression_s
+    (35) expression_s -> . term OR expression_s
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -387,8 +387,8 @@ state 14
 
     expression                     shift and go to state 35
     expression_s                   shift and go to state 36
-    expression_t                   shift and go to state 37
-    expression_f                   shift and go to state 38
+    term                           shift and go to state 37
+    factor                         shift and go to state 38
     elem                           shift and go to state 39
 
 state 15
@@ -434,16 +434,16 @@ state 17
     (20) statement -> IF . expression THEN block ELSE block END IF
     (30) expression -> . expression_s op_rel expression_s
     (31) expression -> . expression_s
-    (32) expression_s -> . expression_t
-    (33) expression_s -> . expression_t PLUS expression_s
-    (34) expression_s -> . expression_t MINUS expression_s
-    (35) expression_s -> . expression_t OR expression_s
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (32) expression_s -> . term
+    (33) expression_s -> . term PLUS expression_s
+    (34) expression_s -> . term MINUS expression_s
+    (35) expression_s -> . term OR expression_s
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -456,8 +456,8 @@ state 17
 
     expression                     shift and go to state 43
     expression_s                   shift and go to state 36
-    expression_t                   shift and go to state 37
-    expression_f                   shift and go to state 38
+    term                           shift and go to state 37
+    factor                         shift and go to state 38
     elem                           shift and go to state 39
 
 state 18
@@ -884,31 +884,31 @@ state 36
 
 state 37
 
-    (32) expression_s -> expression_t .
-    (33) expression_s -> expression_t . PLUS expression_s
-    (34) expression_s -> expression_t . MINUS expression_s
-    (35) expression_s -> expression_t . OR expression_s
+    (32) expression_s -> term .
+    (33) expression_s -> term . PLUS expression_s
+    (34) expression_s -> term . MINUS expression_s
+    (35) expression_s -> term . OR expression_s
 
-    LESSTHAN        reduce using rule 32 (expression_s -> expression_t .)
-    GREATERTHAN     reduce using rule 32 (expression_s -> expression_t .)
-    ISEQUALTO       reduce using rule 32 (expression_s -> expression_t .)
-    INPUT           reduce using rule 32 (expression_s -> expression_t .)
-    PRINT           reduce using rule 32 (expression_s -> expression_t .)
-    FOR             reduce using rule 32 (expression_s -> expression_t .)
-    WHILE           reduce using rule 32 (expression_s -> expression_t .)
-    DO              reduce using rule 32 (expression_s -> expression_t .)
-    LET             reduce using rule 32 (expression_s -> expression_t .)
-    IF              reduce using rule 32 (expression_s -> expression_t .)
-    GOSUB           reduce using rule 32 (expression_s -> expression_t .)
-    GOTO            reduce using rule 32 (expression_s -> expression_t .)
-    LABEL_SALTO     reduce using rule 32 (expression_s -> expression_t .)
-    LOOP            reduce using rule 32 (expression_s -> expression_t .)
-    THEN            reduce using rule 32 (expression_s -> expression_t .)
-    CLOSEPAR        reduce using rule 32 (expression_s -> expression_t .)
-    END             reduce using rule 32 (expression_s -> expression_t .)
-    RETURN          reduce using rule 32 (expression_s -> expression_t .)
-    ELSE            reduce using rule 32 (expression_s -> expression_t .)
-    NEXT            reduce using rule 32 (expression_s -> expression_t .)
+    LESSTHAN        reduce using rule 32 (expression_s -> term .)
+    GREATERTHAN     reduce using rule 32 (expression_s -> term .)
+    ISEQUALTO       reduce using rule 32 (expression_s -> term .)
+    INPUT           reduce using rule 32 (expression_s -> term .)
+    PRINT           reduce using rule 32 (expression_s -> term .)
+    FOR             reduce using rule 32 (expression_s -> term .)
+    WHILE           reduce using rule 32 (expression_s -> term .)
+    DO              reduce using rule 32 (expression_s -> term .)
+    LET             reduce using rule 32 (expression_s -> term .)
+    IF              reduce using rule 32 (expression_s -> term .)
+    GOSUB           reduce using rule 32 (expression_s -> term .)
+    GOTO            reduce using rule 32 (expression_s -> term .)
+    LABEL_SALTO     reduce using rule 32 (expression_s -> term .)
+    LOOP            reduce using rule 32 (expression_s -> term .)
+    THEN            reduce using rule 32 (expression_s -> term .)
+    CLOSEPAR        reduce using rule 32 (expression_s -> term .)
+    END             reduce using rule 32 (expression_s -> term .)
+    RETURN          reduce using rule 32 (expression_s -> term .)
+    ELSE            reduce using rule 32 (expression_s -> term .)
+    NEXT            reduce using rule 32 (expression_s -> term .)
     PLUS            shift and go to state 62
     MINUS           shift and go to state 63
     OR              shift and go to state 64
@@ -916,34 +916,34 @@ state 37
 
 state 38
 
-    (36) expression_t -> expression_f .
-    (37) expression_t -> expression_f . MULTIPLY expression_t
-    (38) expression_t -> expression_f . DIVIDE expression_t
-    (39) expression_t -> expression_f . AND expression_t
+    (36) term -> factor .
+    (37) term -> factor . MULTIPLY term
+    (38) term -> factor . DIVIDE term
+    (39) term -> factor . AND term
 
-    PLUS            reduce using rule 36 (expression_t -> expression_f .)
-    MINUS           reduce using rule 36 (expression_t -> expression_f .)
-    OR              reduce using rule 36 (expression_t -> expression_f .)
-    LESSTHAN        reduce using rule 36 (expression_t -> expression_f .)
-    GREATERTHAN     reduce using rule 36 (expression_t -> expression_f .)
-    ISEQUALTO       reduce using rule 36 (expression_t -> expression_f .)
-    INPUT           reduce using rule 36 (expression_t -> expression_f .)
-    PRINT           reduce using rule 36 (expression_t -> expression_f .)
-    FOR             reduce using rule 36 (expression_t -> expression_f .)
-    WHILE           reduce using rule 36 (expression_t -> expression_f .)
-    DO              reduce using rule 36 (expression_t -> expression_f .)
-    LET             reduce using rule 36 (expression_t -> expression_f .)
-    IF              reduce using rule 36 (expression_t -> expression_f .)
-    GOSUB           reduce using rule 36 (expression_t -> expression_f .)
-    GOTO            reduce using rule 36 (expression_t -> expression_f .)
-    LABEL_SALTO     reduce using rule 36 (expression_t -> expression_f .)
-    LOOP            reduce using rule 36 (expression_t -> expression_f .)
-    THEN            reduce using rule 36 (expression_t -> expression_f .)
-    CLOSEPAR        reduce using rule 36 (expression_t -> expression_f .)
-    END             reduce using rule 36 (expression_t -> expression_f .)
-    RETURN          reduce using rule 36 (expression_t -> expression_f .)
-    ELSE            reduce using rule 36 (expression_t -> expression_f .)
-    NEXT            reduce using rule 36 (expression_t -> expression_f .)
+    PLUS            reduce using rule 36 (term -> factor .)
+    MINUS           reduce using rule 36 (term -> factor .)
+    OR              reduce using rule 36 (term -> factor .)
+    LESSTHAN        reduce using rule 36 (term -> factor .)
+    GREATERTHAN     reduce using rule 36 (term -> factor .)
+    ISEQUALTO       reduce using rule 36 (term -> factor .)
+    INPUT           reduce using rule 36 (term -> factor .)
+    PRINT           reduce using rule 36 (term -> factor .)
+    FOR             reduce using rule 36 (term -> factor .)
+    WHILE           reduce using rule 36 (term -> factor .)
+    DO              reduce using rule 36 (term -> factor .)
+    LET             reduce using rule 36 (term -> factor .)
+    IF              reduce using rule 36 (term -> factor .)
+    GOSUB           reduce using rule 36 (term -> factor .)
+    GOTO            reduce using rule 36 (term -> factor .)
+    LABEL_SALTO     reduce using rule 36 (term -> factor .)
+    LOOP            reduce using rule 36 (term -> factor .)
+    THEN            reduce using rule 36 (term -> factor .)
+    CLOSEPAR        reduce using rule 36 (term -> factor .)
+    END             reduce using rule 36 (term -> factor .)
+    RETURN          reduce using rule 36 (term -> factor .)
+    ELSE            reduce using rule 36 (term -> factor .)
+    NEXT            reduce using rule 36 (term -> factor .)
     MULTIPLY        shift and go to state 65
     DIVIDE          shift and go to state 66
     AND             shift and go to state 67
@@ -951,51 +951,51 @@ state 38
 
 state 39
 
-    (40) expression_f -> elem .
+    (40) factor -> elem .
 
-    MULTIPLY        reduce using rule 40 (expression_f -> elem .)
-    DIVIDE          reduce using rule 40 (expression_f -> elem .)
-    AND             reduce using rule 40 (expression_f -> elem .)
-    PLUS            reduce using rule 40 (expression_f -> elem .)
-    MINUS           reduce using rule 40 (expression_f -> elem .)
-    OR              reduce using rule 40 (expression_f -> elem .)
-    LESSTHAN        reduce using rule 40 (expression_f -> elem .)
-    GREATERTHAN     reduce using rule 40 (expression_f -> elem .)
-    ISEQUALTO       reduce using rule 40 (expression_f -> elem .)
-    INPUT           reduce using rule 40 (expression_f -> elem .)
-    PRINT           reduce using rule 40 (expression_f -> elem .)
-    FOR             reduce using rule 40 (expression_f -> elem .)
-    WHILE           reduce using rule 40 (expression_f -> elem .)
-    DO              reduce using rule 40 (expression_f -> elem .)
-    LET             reduce using rule 40 (expression_f -> elem .)
-    IF              reduce using rule 40 (expression_f -> elem .)
-    GOSUB           reduce using rule 40 (expression_f -> elem .)
-    GOTO            reduce using rule 40 (expression_f -> elem .)
-    LABEL_SALTO     reduce using rule 40 (expression_f -> elem .)
-    LOOP            reduce using rule 40 (expression_f -> elem .)
-    THEN            reduce using rule 40 (expression_f -> elem .)
-    CLOSEPAR        reduce using rule 40 (expression_f -> elem .)
-    END             reduce using rule 40 (expression_f -> elem .)
-    RETURN          reduce using rule 40 (expression_f -> elem .)
-    ELSE            reduce using rule 40 (expression_f -> elem .)
-    NEXT            reduce using rule 40 (expression_f -> elem .)
+    MULTIPLY        reduce using rule 40 (factor -> elem .)
+    DIVIDE          reduce using rule 40 (factor -> elem .)
+    AND             reduce using rule 40 (factor -> elem .)
+    PLUS            reduce using rule 40 (factor -> elem .)
+    MINUS           reduce using rule 40 (factor -> elem .)
+    OR              reduce using rule 40 (factor -> elem .)
+    LESSTHAN        reduce using rule 40 (factor -> elem .)
+    GREATERTHAN     reduce using rule 40 (factor -> elem .)
+    ISEQUALTO       reduce using rule 40 (factor -> elem .)
+    INPUT           reduce using rule 40 (factor -> elem .)
+    PRINT           reduce using rule 40 (factor -> elem .)
+    FOR             reduce using rule 40 (factor -> elem .)
+    WHILE           reduce using rule 40 (factor -> elem .)
+    DO              reduce using rule 40 (factor -> elem .)
+    LET             reduce using rule 40 (factor -> elem .)
+    IF              reduce using rule 40 (factor -> elem .)
+    GOSUB           reduce using rule 40 (factor -> elem .)
+    GOTO            reduce using rule 40 (factor -> elem .)
+    LABEL_SALTO     reduce using rule 40 (factor -> elem .)
+    LOOP            reduce using rule 40 (factor -> elem .)
+    THEN            reduce using rule 40 (factor -> elem .)
+    CLOSEPAR        reduce using rule 40 (factor -> elem .)
+    END             reduce using rule 40 (factor -> elem .)
+    RETURN          reduce using rule 40 (factor -> elem .)
+    ELSE            reduce using rule 40 (factor -> elem .)
+    NEXT            reduce using rule 40 (factor -> elem .)
 
 
 state 40
 
-    (41) expression_f -> OPENPAR . expression CLOSEPAR
+    (41) factor -> OPENPAR . expression CLOSEPAR
     (30) expression -> . expression_s op_rel expression_s
     (31) expression -> . expression_s
-    (32) expression_s -> . expression_t
-    (33) expression_s -> . expression_t PLUS expression_s
-    (34) expression_s -> . expression_t MINUS expression_s
-    (35) expression_s -> . expression_t OR expression_s
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (32) expression_s -> . term
+    (33) expression_s -> . term PLUS expression_s
+    (34) expression_s -> . term MINUS expression_s
+    (35) expression_s -> . term OR expression_s
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -1008,8 +1008,8 @@ state 40
 
     expression                     shift and go to state 68
     expression_s                   shift and go to state 36
-    expression_t                   shift and go to state 37
-    expression_f                   shift and go to state 38
+    term                           shift and go to state 37
+    factor                         shift and go to state 38
     elem                           shift and go to state 39
 
 state 41
@@ -1354,16 +1354,16 @@ state 57
 state 58
 
     (30) expression -> expression_s op_rel . expression_s
-    (32) expression_s -> . expression_t
-    (33) expression_s -> . expression_t PLUS expression_s
-    (34) expression_s -> . expression_t MINUS expression_s
-    (35) expression_s -> . expression_t OR expression_s
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (32) expression_s -> . term
+    (33) expression_s -> . term PLUS expression_s
+    (34) expression_s -> . term MINUS expression_s
+    (35) expression_s -> . term OR expression_s
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -1375,8 +1375,8 @@ state 58
     IDENTIFIER      shift and go to state 32
 
     expression_s                   shift and go to state 80
-    expression_t                   shift and go to state 37
-    expression_f                   shift and go to state 38
+    term                           shift and go to state 37
+    factor                         shift and go to state 38
     elem                           shift and go to state 39
 
 state 59
@@ -1411,17 +1411,17 @@ state 61
 
 state 62
 
-    (33) expression_s -> expression_t PLUS . expression_s
-    (32) expression_s -> . expression_t
-    (33) expression_s -> . expression_t PLUS expression_s
-    (34) expression_s -> . expression_t MINUS expression_s
-    (35) expression_s -> . expression_t OR expression_s
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (33) expression_s -> term PLUS . expression_s
+    (32) expression_s -> . term
+    (33) expression_s -> . term PLUS expression_s
+    (34) expression_s -> . term MINUS expression_s
+    (35) expression_s -> . term OR expression_s
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -1432,24 +1432,24 @@ state 62
     FLOAT           shift and go to state 31
     IDENTIFIER      shift and go to state 32
 
-    expression_t                   shift and go to state 37
+    term                           shift and go to state 37
     expression_s                   shift and go to state 81
-    expression_f                   shift and go to state 38
+    factor                         shift and go to state 38
     elem                           shift and go to state 39
 
 state 63
 
-    (34) expression_s -> expression_t MINUS . expression_s
-    (32) expression_s -> . expression_t
-    (33) expression_s -> . expression_t PLUS expression_s
-    (34) expression_s -> . expression_t MINUS expression_s
-    (35) expression_s -> . expression_t OR expression_s
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (34) expression_s -> term MINUS . expression_s
+    (32) expression_s -> . term
+    (33) expression_s -> . term PLUS expression_s
+    (34) expression_s -> . term MINUS expression_s
+    (35) expression_s -> . term OR expression_s
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -1460,24 +1460,24 @@ state 63
     FLOAT           shift and go to state 31
     IDENTIFIER      shift and go to state 32
 
-    expression_t                   shift and go to state 37
+    term                           shift and go to state 37
     expression_s                   shift and go to state 82
-    expression_f                   shift and go to state 38
+    factor                         shift and go to state 38
     elem                           shift and go to state 39
 
 state 64
 
-    (35) expression_s -> expression_t OR . expression_s
-    (32) expression_s -> . expression_t
-    (33) expression_s -> . expression_t PLUS expression_s
-    (34) expression_s -> . expression_t MINUS expression_s
-    (35) expression_s -> . expression_t OR expression_s
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (35) expression_s -> term OR . expression_s
+    (32) expression_s -> . term
+    (33) expression_s -> . term PLUS expression_s
+    (34) expression_s -> . term MINUS expression_s
+    (35) expression_s -> . term OR expression_s
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -1488,20 +1488,20 @@ state 64
     FLOAT           shift and go to state 31
     IDENTIFIER      shift and go to state 32
 
-    expression_t                   shift and go to state 37
+    term                           shift and go to state 37
     expression_s                   shift and go to state 83
-    expression_f                   shift and go to state 38
+    factor                         shift and go to state 38
     elem                           shift and go to state 39
 
 state 65
 
-    (37) expression_t -> expression_f MULTIPLY . expression_t
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (37) term -> factor MULTIPLY . term
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -1512,19 +1512,19 @@ state 65
     FLOAT           shift and go to state 31
     IDENTIFIER      shift and go to state 32
 
-    expression_f                   shift and go to state 38
-    expression_t                   shift and go to state 84
+    factor                         shift and go to state 38
+    term                           shift and go to state 84
     elem                           shift and go to state 39
 
 state 66
 
-    (38) expression_t -> expression_f DIVIDE . expression_t
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (38) term -> factor DIVIDE . term
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -1535,19 +1535,19 @@ state 66
     FLOAT           shift and go to state 31
     IDENTIFIER      shift and go to state 32
 
-    expression_f                   shift and go to state 38
-    expression_t                   shift and go to state 85
+    factor                         shift and go to state 38
+    term                           shift and go to state 85
     elem                           shift and go to state 39
 
 state 67
 
-    (39) expression_t -> expression_f AND . expression_t
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (39) term -> factor AND . term
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -1558,13 +1558,13 @@ state 67
     FLOAT           shift and go to state 31
     IDENTIFIER      shift and go to state 32
 
-    expression_f                   shift and go to state 38
-    expression_t                   shift and go to state 86
+    factor                         shift and go to state 38
+    term                           shift and go to state 86
     elem                           shift and go to state 39
 
 state 68
 
-    (41) expression_f -> OPENPAR expression . CLOSEPAR
+    (41) factor -> OPENPAR expression . CLOSEPAR
 
     CLOSEPAR        shift and go to state 87
 
@@ -1818,199 +1818,199 @@ state 80
 
 state 81
 
-    (33) expression_s -> expression_t PLUS expression_s .
+    (33) expression_s -> term PLUS expression_s .
 
-    LESSTHAN        reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    GREATERTHAN     reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    ISEQUALTO       reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    INPUT           reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    PRINT           reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    FOR             reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    WHILE           reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    DO              reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    LET             reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    IF              reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    GOSUB           reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    GOTO            reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    LABEL_SALTO     reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    LOOP            reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    THEN            reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    CLOSEPAR        reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    END             reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    RETURN          reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    ELSE            reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
-    NEXT            reduce using rule 33 (expression_s -> expression_t PLUS expression_s .)
+    LESSTHAN        reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    GREATERTHAN     reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    ISEQUALTO       reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    INPUT           reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    PRINT           reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    FOR             reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    WHILE           reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    DO              reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    LET             reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    IF              reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    GOSUB           reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    GOTO            reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    LABEL_SALTO     reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    LOOP            reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    THEN            reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    CLOSEPAR        reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    END             reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    RETURN          reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    ELSE            reduce using rule 33 (expression_s -> term PLUS expression_s .)
+    NEXT            reduce using rule 33 (expression_s -> term PLUS expression_s .)
 
 
 state 82
 
-    (34) expression_s -> expression_t MINUS expression_s .
+    (34) expression_s -> term MINUS expression_s .
 
-    LESSTHAN        reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    GREATERTHAN     reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    ISEQUALTO       reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    INPUT           reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    PRINT           reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    FOR             reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    WHILE           reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    DO              reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    LET             reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    IF              reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    GOSUB           reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    GOTO            reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    LABEL_SALTO     reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    LOOP            reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    THEN            reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    CLOSEPAR        reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    END             reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    RETURN          reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    ELSE            reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
-    NEXT            reduce using rule 34 (expression_s -> expression_t MINUS expression_s .)
+    LESSTHAN        reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    GREATERTHAN     reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    ISEQUALTO       reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    INPUT           reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    PRINT           reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    FOR             reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    WHILE           reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    DO              reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    LET             reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    IF              reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    GOSUB           reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    GOTO            reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    LABEL_SALTO     reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    LOOP            reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    THEN            reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    CLOSEPAR        reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    END             reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    RETURN          reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    ELSE            reduce using rule 34 (expression_s -> term MINUS expression_s .)
+    NEXT            reduce using rule 34 (expression_s -> term MINUS expression_s .)
 
 
 state 83
 
-    (35) expression_s -> expression_t OR expression_s .
+    (35) expression_s -> term OR expression_s .
 
-    LESSTHAN        reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    GREATERTHAN     reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    ISEQUALTO       reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    INPUT           reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    PRINT           reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    FOR             reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    WHILE           reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    DO              reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    LET             reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    IF              reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    GOSUB           reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    GOTO            reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    LABEL_SALTO     reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    LOOP            reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    THEN            reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    CLOSEPAR        reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    END             reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    RETURN          reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    ELSE            reduce using rule 35 (expression_s -> expression_t OR expression_s .)
-    NEXT            reduce using rule 35 (expression_s -> expression_t OR expression_s .)
+    LESSTHAN        reduce using rule 35 (expression_s -> term OR expression_s .)
+    GREATERTHAN     reduce using rule 35 (expression_s -> term OR expression_s .)
+    ISEQUALTO       reduce using rule 35 (expression_s -> term OR expression_s .)
+    INPUT           reduce using rule 35 (expression_s -> term OR expression_s .)
+    PRINT           reduce using rule 35 (expression_s -> term OR expression_s .)
+    FOR             reduce using rule 35 (expression_s -> term OR expression_s .)
+    WHILE           reduce using rule 35 (expression_s -> term OR expression_s .)
+    DO              reduce using rule 35 (expression_s -> term OR expression_s .)
+    LET             reduce using rule 35 (expression_s -> term OR expression_s .)
+    IF              reduce using rule 35 (expression_s -> term OR expression_s .)
+    GOSUB           reduce using rule 35 (expression_s -> term OR expression_s .)
+    GOTO            reduce using rule 35 (expression_s -> term OR expression_s .)
+    LABEL_SALTO     reduce using rule 35 (expression_s -> term OR expression_s .)
+    LOOP            reduce using rule 35 (expression_s -> term OR expression_s .)
+    THEN            reduce using rule 35 (expression_s -> term OR expression_s .)
+    CLOSEPAR        reduce using rule 35 (expression_s -> term OR expression_s .)
+    END             reduce using rule 35 (expression_s -> term OR expression_s .)
+    RETURN          reduce using rule 35 (expression_s -> term OR expression_s .)
+    ELSE            reduce using rule 35 (expression_s -> term OR expression_s .)
+    NEXT            reduce using rule 35 (expression_s -> term OR expression_s .)
 
 
 state 84
 
-    (37) expression_t -> expression_f MULTIPLY expression_t .
+    (37) term -> factor MULTIPLY term .
 
-    PLUS            reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    MINUS           reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    OR              reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    LESSTHAN        reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    GREATERTHAN     reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    ISEQUALTO       reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    INPUT           reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    PRINT           reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    FOR             reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    WHILE           reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    DO              reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    LET             reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    IF              reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    GOSUB           reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    GOTO            reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    LABEL_SALTO     reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    LOOP            reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    THEN            reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    CLOSEPAR        reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    END             reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    RETURN          reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    ELSE            reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
-    NEXT            reduce using rule 37 (expression_t -> expression_f MULTIPLY expression_t .)
+    PLUS            reduce using rule 37 (term -> factor MULTIPLY term .)
+    MINUS           reduce using rule 37 (term -> factor MULTIPLY term .)
+    OR              reduce using rule 37 (term -> factor MULTIPLY term .)
+    LESSTHAN        reduce using rule 37 (term -> factor MULTIPLY term .)
+    GREATERTHAN     reduce using rule 37 (term -> factor MULTIPLY term .)
+    ISEQUALTO       reduce using rule 37 (term -> factor MULTIPLY term .)
+    INPUT           reduce using rule 37 (term -> factor MULTIPLY term .)
+    PRINT           reduce using rule 37 (term -> factor MULTIPLY term .)
+    FOR             reduce using rule 37 (term -> factor MULTIPLY term .)
+    WHILE           reduce using rule 37 (term -> factor MULTIPLY term .)
+    DO              reduce using rule 37 (term -> factor MULTIPLY term .)
+    LET             reduce using rule 37 (term -> factor MULTIPLY term .)
+    IF              reduce using rule 37 (term -> factor MULTIPLY term .)
+    GOSUB           reduce using rule 37 (term -> factor MULTIPLY term .)
+    GOTO            reduce using rule 37 (term -> factor MULTIPLY term .)
+    LABEL_SALTO     reduce using rule 37 (term -> factor MULTIPLY term .)
+    LOOP            reduce using rule 37 (term -> factor MULTIPLY term .)
+    THEN            reduce using rule 37 (term -> factor MULTIPLY term .)
+    CLOSEPAR        reduce using rule 37 (term -> factor MULTIPLY term .)
+    END             reduce using rule 37 (term -> factor MULTIPLY term .)
+    RETURN          reduce using rule 37 (term -> factor MULTIPLY term .)
+    ELSE            reduce using rule 37 (term -> factor MULTIPLY term .)
+    NEXT            reduce using rule 37 (term -> factor MULTIPLY term .)
 
 
 state 85
 
-    (38) expression_t -> expression_f DIVIDE expression_t .
+    (38) term -> factor DIVIDE term .
 
-    PLUS            reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    MINUS           reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    OR              reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    LESSTHAN        reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    GREATERTHAN     reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    ISEQUALTO       reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    INPUT           reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    PRINT           reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    FOR             reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    WHILE           reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    DO              reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    LET             reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    IF              reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    GOSUB           reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    GOTO            reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    LABEL_SALTO     reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    LOOP            reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    THEN            reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    CLOSEPAR        reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    END             reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    RETURN          reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    ELSE            reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
-    NEXT            reduce using rule 38 (expression_t -> expression_f DIVIDE expression_t .)
+    PLUS            reduce using rule 38 (term -> factor DIVIDE term .)
+    MINUS           reduce using rule 38 (term -> factor DIVIDE term .)
+    OR              reduce using rule 38 (term -> factor DIVIDE term .)
+    LESSTHAN        reduce using rule 38 (term -> factor DIVIDE term .)
+    GREATERTHAN     reduce using rule 38 (term -> factor DIVIDE term .)
+    ISEQUALTO       reduce using rule 38 (term -> factor DIVIDE term .)
+    INPUT           reduce using rule 38 (term -> factor DIVIDE term .)
+    PRINT           reduce using rule 38 (term -> factor DIVIDE term .)
+    FOR             reduce using rule 38 (term -> factor DIVIDE term .)
+    WHILE           reduce using rule 38 (term -> factor DIVIDE term .)
+    DO              reduce using rule 38 (term -> factor DIVIDE term .)
+    LET             reduce using rule 38 (term -> factor DIVIDE term .)
+    IF              reduce using rule 38 (term -> factor DIVIDE term .)
+    GOSUB           reduce using rule 38 (term -> factor DIVIDE term .)
+    GOTO            reduce using rule 38 (term -> factor DIVIDE term .)
+    LABEL_SALTO     reduce using rule 38 (term -> factor DIVIDE term .)
+    LOOP            reduce using rule 38 (term -> factor DIVIDE term .)
+    THEN            reduce using rule 38 (term -> factor DIVIDE term .)
+    CLOSEPAR        reduce using rule 38 (term -> factor DIVIDE term .)
+    END             reduce using rule 38 (term -> factor DIVIDE term .)
+    RETURN          reduce using rule 38 (term -> factor DIVIDE term .)
+    ELSE            reduce using rule 38 (term -> factor DIVIDE term .)
+    NEXT            reduce using rule 38 (term -> factor DIVIDE term .)
 
 
 state 86
 
-    (39) expression_t -> expression_f AND expression_t .
+    (39) term -> factor AND term .
 
-    PLUS            reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    MINUS           reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    OR              reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    LESSTHAN        reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    GREATERTHAN     reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    ISEQUALTO       reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    INPUT           reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    PRINT           reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    FOR             reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    WHILE           reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    DO              reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    LET             reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    IF              reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    GOSUB           reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    GOTO            reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    LABEL_SALTO     reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    LOOP            reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    THEN            reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    CLOSEPAR        reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    END             reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    RETURN          reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    ELSE            reduce using rule 39 (expression_t -> expression_f AND expression_t .)
-    NEXT            reduce using rule 39 (expression_t -> expression_f AND expression_t .)
+    PLUS            reduce using rule 39 (term -> factor AND term .)
+    MINUS           reduce using rule 39 (term -> factor AND term .)
+    OR              reduce using rule 39 (term -> factor AND term .)
+    LESSTHAN        reduce using rule 39 (term -> factor AND term .)
+    GREATERTHAN     reduce using rule 39 (term -> factor AND term .)
+    ISEQUALTO       reduce using rule 39 (term -> factor AND term .)
+    INPUT           reduce using rule 39 (term -> factor AND term .)
+    PRINT           reduce using rule 39 (term -> factor AND term .)
+    FOR             reduce using rule 39 (term -> factor AND term .)
+    WHILE           reduce using rule 39 (term -> factor AND term .)
+    DO              reduce using rule 39 (term -> factor AND term .)
+    LET             reduce using rule 39 (term -> factor AND term .)
+    IF              reduce using rule 39 (term -> factor AND term .)
+    GOSUB           reduce using rule 39 (term -> factor AND term .)
+    GOTO            reduce using rule 39 (term -> factor AND term .)
+    LABEL_SALTO     reduce using rule 39 (term -> factor AND term .)
+    LOOP            reduce using rule 39 (term -> factor AND term .)
+    THEN            reduce using rule 39 (term -> factor AND term .)
+    CLOSEPAR        reduce using rule 39 (term -> factor AND term .)
+    END             reduce using rule 39 (term -> factor AND term .)
+    RETURN          reduce using rule 39 (term -> factor AND term .)
+    ELSE            reduce using rule 39 (term -> factor AND term .)
+    NEXT            reduce using rule 39 (term -> factor AND term .)
 
 
 state 87
 
-    (41) expression_f -> OPENPAR expression CLOSEPAR .
+    (41) factor -> OPENPAR expression CLOSEPAR .
 
-    MULTIPLY        reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    DIVIDE          reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    AND             reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    PLUS            reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    MINUS           reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    OR              reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    LESSTHAN        reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    GREATERTHAN     reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    ISEQUALTO       reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    INPUT           reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    PRINT           reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    FOR             reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    WHILE           reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    DO              reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    LET             reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    IF              reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    GOSUB           reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    GOTO            reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    LABEL_SALTO     reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    LOOP            reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    THEN            reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    CLOSEPAR        reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    END             reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    RETURN          reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    ELSE            reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
-    NEXT            reduce using rule 41 (expression_f -> OPENPAR expression CLOSEPAR .)
+    MULTIPLY        reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    DIVIDE          reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    AND             reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    PLUS            reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    MINUS           reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    OR              reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    LESSTHAN        reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    GREATERTHAN     reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    ISEQUALTO       reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    INPUT           reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    PRINT           reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    FOR             reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    WHILE           reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    DO              reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    LET             reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    IF              reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    GOSUB           reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    GOTO            reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    LABEL_SALTO     reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    LOOP            reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    THEN            reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    CLOSEPAR        reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    END             reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    RETURN          reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    ELSE            reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
+    NEXT            reduce using rule 41 (factor -> OPENPAR expression CLOSEPAR .)
 
 
 state 88
@@ -2018,16 +2018,16 @@ state 88
     (18) statement -> DO block LOOP WHILE . expression
     (30) expression -> . expression_s op_rel expression_s
     (31) expression -> . expression_s
-    (32) expression_s -> . expression_t
-    (33) expression_s -> . expression_t PLUS expression_s
-    (34) expression_s -> . expression_t MINUS expression_s
-    (35) expression_s -> . expression_t OR expression_s
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (32) expression_s -> . term
+    (33) expression_s -> . term PLUS expression_s
+    (34) expression_s -> . term MINUS expression_s
+    (35) expression_s -> . term OR expression_s
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -2040,8 +2040,8 @@ state 88
 
     expression                     shift and go to state 93
     expression_s                   shift and go to state 36
-    expression_t                   shift and go to state 37
-    expression_f                   shift and go to state 38
+    term                           shift and go to state 37
+    factor                         shift and go to state 38
     elem                           shift and go to state 39
 
 state 89
@@ -2049,16 +2049,16 @@ state 89
     (19) statement -> LET IDENTIFIER repeated_size EQUALS . expression
     (30) expression -> . expression_s op_rel expression_s
     (31) expression -> . expression_s
-    (32) expression_s -> . expression_t
-    (33) expression_s -> . expression_t PLUS expression_s
-    (34) expression_s -> . expression_t MINUS expression_s
-    (35) expression_s -> . expression_t OR expression_s
-    (36) expression_t -> . expression_f
-    (37) expression_t -> . expression_f MULTIPLY expression_t
-    (38) expression_t -> . expression_f DIVIDE expression_t
-    (39) expression_t -> . expression_f AND expression_t
-    (40) expression_f -> . elem
-    (41) expression_f -> . OPENPAR expression CLOSEPAR
+    (32) expression_s -> . term
+    (33) expression_s -> . term PLUS expression_s
+    (34) expression_s -> . term MINUS expression_s
+    (35) expression_s -> . term OR expression_s
+    (36) term -> . factor
+    (37) term -> . factor MULTIPLY term
+    (38) term -> . factor DIVIDE term
+    (39) term -> . factor AND term
+    (40) factor -> . elem
+    (41) factor -> . OPENPAR expression CLOSEPAR
     (42) elem -> . INT
     (43) elem -> . FLOAT
     (44) elem -> . IDENTIFIER repeated_size
@@ -2071,8 +2071,8 @@ state 89
 
     expression                     shift and go to state 94
     expression_s                   shift and go to state 36
-    expression_t                   shift and go to state 37
-    expression_f                   shift and go to state 38
+    term                           shift and go to state 37
+    factor                         shift and go to state 38
     elem                           shift and go to state 39
 
 state 90

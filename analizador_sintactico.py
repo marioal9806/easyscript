@@ -101,25 +101,25 @@ def p_expression(p):
 
 def p_expression_s(p):
     '''
-    expression_s : expression_t 
-                | expression_t PLUS expression_s
-                | expression_t MINUS expression_s
-                | expression_t OR expression_s
+    expression_s : term 
+                | term PLUS expression_s
+                | term MINUS expression_s
+                | term OR expression_s
     '''
     print(p)
 
-def p_expression_t(p):
+def p_term(p):
     '''
-    expression_t : expression_f
-                | expression_f MULTIPLY expression_t
-                | expression_f DIVIDE expression_t
-                | expression_f AND expression_t
+    term : factor
+                | factor MULTIPLY term
+                | factor DIVIDE term
+                | factor AND term
     '''
     print(p)
 
-def p_expression_f(p):
+def p_factor(p):
     '''
-    expression_f : elem
+    factor : elem
                 | OPENPAR expression CLOSEPAR
     '''
     print(p)
