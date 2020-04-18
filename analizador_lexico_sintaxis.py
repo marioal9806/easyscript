@@ -2,36 +2,40 @@ import ply.lex as lex
 import ply.yacc as yacc
 import sys
 
+reserved = {
+    'PROGRAM' : 'PROGRAM',
+    'DIM' : 'DIM',
+    'AS' : 'AS',
+    'INPUT' : 'INPUT',
+    'PRINT' : 'PRINT',
+    'END' : 'END',
+    'LET' : 'LET',
+    'IF' : 'IF',
+    'THEN' : 'THEN',
+    'ELSE' : 'ELSE',
+    'WHILE' : 'WHILE',
+    'LOOP' : 'LOOP',
+    'DO' : 'DO',
+    'FOR' : 'FOR',
+    'NEXT' : 'NEXT',
+    'GOTO' : 'GOTO',
+    'GOSUB' : 'GOSUB',
+    'RETURN' : 'RETURN',
+    'TO' : 'TO',
+    'INT' : 'INT_TYPE',
+    'FLOAT' : 'FLOAT_TYPE',
+    'STRING' : 'STRING_TYPE',
+    'OR' : 'OR',
+    'AND' : 'AND'
+}
+
 tokens = [
-    'PROGRAM',
-    'DIM',
-    'AS',
-    'INPUT',
-    'COMMA',
-    'PRINT',
-    'END',
-    'LET',
-    'IF',
-    'THEN',
-    'ELSE',
-    'WHILE',
-    'LOOP',
-    'DO',
-    'FOR',
-    'NEXT',
-    'GOTO',
-    'TO',
-    'GOSUB',
-    
     'LABEL',
     'LABEL_SALTO',
-    'RETURN',
+    'COMMA',
 
-    'INT_TYPE',
     'INT',
     'FLOAT',
-    'FLOAT_TYPE',
-    'STRING_TYPE',
     'STRING',
     'SIZE',
     'SIZE_ID',
@@ -44,14 +48,12 @@ tokens = [
     'MINUS',
     'MULTIPLY',
     'DIVIDE',
-    'OR',
-    'AND',
     'LESSTHAN',
     'GREATERTHAN',
 
     'OPENPAR',
     'CLOSEPAR'
-]
+] + list(reserved.values())
 
 t_ISEQUALTO = r'\=\='
 t_EQUALS = r'\='
@@ -64,107 +66,7 @@ t_CLOSEPAR = r'\)'
 t_LESSTHAN = r'\<'
 t_GREATERTHAN = r'\>'
 t_ignore = r' \t'
-
-
-def t_PROGRAM(t):
-    r'PROGRAM'
-    t.type = 'PROGRAM'
-    return t
-
-def t_DIM(t):
-    r'DIM'
-    t.type = 'DIM'
-    return t
-
-def t_AS(t):
-    r'AS'
-    t.type = 'AS'
-    return t
-
-def t_INPUT(t):
-    r'INPUT'
-    t.type = 'INPUT'
-    return t
-
-def t_COMMA(t):
-    r','
-    t.type = 'COMMA'
-    return t
-
-def t_PRINT(t):
-    r'PRINT'
-    t.type = 'PRINT'
-    return t
-
-def t_END(t):
-    r'END'
-    t.type = 'END'
-    return t
-
-def t_LET(t):
-    r'LET'
-    t.type = 'LET'
-    return t
-
-def t_IF(t):
-    r'IF'
-    t.type = 'IF'
-    return t
-
-def t_THEN(t):
-    r'THEN'
-    t.type = 'THEN'
-    return t
-
-def t_ELSE(t):
-    r'ELSE'
-    t.type = 'ELSE'
-    return t
-
-def t_WHILE(t):
-    r'WHILE'
-    t.type = 'WHILE'
-    return t
-
-def t_LOOP(t):
-    r'LOOP'
-    t.type = 'LOOP'
-    return t
-
-def t_DO(t):
-    r'DO'
-    t.type = 'DO'
-    return t
-
-def t_FOR(t):
-    r'FOR'
-    t.type = 'FOR'
-    return t
-
-def t_NEXT(t):
-    r'NEXT'
-    t.type = 'NEXT'
-    return t
-
-def t_GOTO(t):
-    r'GOTO'
-    t.type = 'GOTO'
-    return t
-
-def t_GOSUB(t):
-    r'GOSUB'
-    t.type = 'GOSUB'
-    return t
-
-def t_RETURN(t):
-    r'RETURN'
-    t.type = 'RETURN'
-    return t
-
-def t_TO(t):
-    r'TO'
-    t.type = 'TO'
-    return t
+t_COMMA = r','
 
 def t_LABEL(t):
     r'\#[a-zA-Z_][a-zA-Z0-9_]*'
@@ -176,38 +78,14 @@ def t_LABEL_SALTO(t):
     t.type = 'LABEL_SALTO'
     return t
 
-def t_INT_TYPE(t):
-    r'INT'
-    t.type = 'INT_TYPE'
-    return t
-
 def t_INT(t):
     r'\d+'
     t.value = int(t.value)
     return t
 
-def t_FLOAT_TYPE(t):
-    r'FLOAT'
-    t.type = 'FLOAT_TYPE'
-    return t
-
 def t_FLOAT(t):
     r'\d+\.\d'
     t.value = float(t.value)
-    return t
-
-def t_STRING_TYPE(t):
-    r'STRING'
-    t.type = 'STRING_TYPE'
-
-def t_OR(t):
-    r'OR'
-    t.type = 'OR'
-    return t
-
-def t_AND(t):
-    r'AND'
-    t.type = 'AND'
     return t
 
 def t_SIZE(t):
@@ -217,15 +95,17 @@ def t_SIZE(t):
 
 def t_SIZE_ID(t):
     r'\[[a-zA-Z_][a-zA-Z0-9_]*\]'
+    t.type = 'SIZE_ID'
+    return t
 
 def t_STRING(t):
     r'\"[a-zA-Z0-9_ \\]*\"'
-    t.value = str(t.value)
+    t.value = str(t.value.lstrip("\"").rstrip("\""))
     return t
 
 def t_IDENTIFIER(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
-    t.type = 'IDENTIFIER'
+    t.type = reserved.get(t.value, 'IDENTIFIER')
     return t
 
 def t_error(t):
