@@ -1,3 +1,10 @@
+'''
+Language : ScriptGO
+Author : Mario Alberto Ortega
+Student ID : A01730557
+'''
+
+
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
