@@ -17,7 +17,7 @@ def p_programa(p):
     '''
     programa : PROGRAM var procedure block END
     '''
-    print(p)
+    pass
 
 def p_var(p):
     '''
@@ -25,7 +25,7 @@ def p_var(p):
         | DIM repeated_identifier AS STRING_TYPE var
         | 
     '''
-    print(p)
+    pass
 
 def p_repeated_size(p):
     '''
@@ -33,28 +33,28 @@ def p_repeated_size(p):
                     | SIZE_ID repeated_size
                     | 
     '''
-    print(p)
+    pass
 
 def p_repeated_identifier(p):
     '''
     repeated_identifier : IDENTIFIER COMMA repeated_identifier
                         | IDENTIFIER
     '''
-    print(p)
+    pass
 
 def p_var_type(p):
     '''
     type : INT_TYPE
             | FLOAT_TYPE
     '''
-    print(p)
+    pass
     
 def p_block(p):
     '''
     block : statement block
             | 
     '''
-    print(p)
+    pass
 
 def p_statement(p):
     '''
@@ -69,35 +69,35 @@ def p_statement(p):
         | GOTO LABEL
         | LABEL_SALTO
     '''
-    print(p)
+    pass
 
 def p_procedure(p):
     '''
     procedure : LABEL block RETURN procedure
                 | 
     '''
-    print(p)
+    pass
 
 def p_repeated_print(p):
     '''
     repeated_print : repeated_elem COMMA repeated_print
                     | repeated_elem
     '''
-    print(p)
+    pass
 
 def p_repeated_elem(p):
     '''
     repeated_elem : STRING
                     | elem
     '''
-    print(p)
+    pass
 
 def p_expression(p):
     '''
     expression : expression_s op_rel expression_s
                 | expression_s
     '''
-    print(p)
+    pass
 
 def p_expression_s(p):
     '''
@@ -106,7 +106,7 @@ def p_expression_s(p):
                 | term MINUS expression_s
                 | term OR expression_s
     '''
-    print(p)
+    pass
 
 def p_term(p):
     '''
@@ -115,14 +115,14 @@ def p_term(p):
                 | factor DIVIDE term
                 | factor AND term
     '''
-    print(p)
+    pass
 
 def p_factor(p):
     '''
     factor : elem
-                | OPENPAR expression CLOSEPAR
+            | OPENPAR expression CLOSEPAR
     '''
-    print(p)
+    pass
 
 def p_elem_num(p):
     '''
@@ -130,7 +130,7 @@ def p_elem_num(p):
         | FLOAT
         | IDENTIFIER repeated_size
     '''
-    print(p)
+    pass
 
 def p_op_rel(p):
     '''
@@ -138,11 +138,11 @@ def p_op_rel(p):
             | GREATERTHAN
             | ISEQUALTO
     '''
-    print(p)
+    pass
 
 def p_error(p):
     print("Syntax error found!")
-    print(p)
+    pass
 
 # PARSER
 # -------------------------------------------------------------------------
