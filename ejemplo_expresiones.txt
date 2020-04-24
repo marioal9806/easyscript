@@ -1,0 +1,8 @@
+PROGRAM
+DIM a, b, c AS INT
+
+LET a = 1 + 2
+LET b = a + 3
+LET c = a + b
+
+END
