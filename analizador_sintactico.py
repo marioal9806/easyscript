@@ -23,15 +23,18 @@ def p_var(p):
     '''
     var : DIM repeated_identifier AS type repeated_size var
         | DIM repeated_identifier AS STRING_TYPE var
-        | 
+        | empty
     '''
-    pass
+    global aux_dim
+    if(len(p) != 2):
+        for variable in aux_dim:
+            symbol_table[variable] = [p[4],None]
 
 def p_repeated_size(p):
     '''
     repeated_size : SIZE repeated_size
                     | SIZE_ID repeated_size
-                    | 
+                    | empty
     '''
     pass
 
@@ -40,20 +43,20 @@ def p_repeated_identifier(p):
     repeated_identifier : IDENTIFIER COMMA repeated_identifier
                         | IDENTIFIER
     '''
-    global env
-    env[p[1]] = None
+    global aux_dim
+    aux_dim.append(p[1])
 
 def p_var_type(p):
     '''
     type : INT_TYPE
             | FLOAT_TYPE
     '''
-    pass
+    p[0] = p[1]
     
 def p_block(p):
     '''
     block : statement block
-            | 
+            | empty
     '''
     pass
 
@@ -75,12 +78,16 @@ def p_statement_assignment(p):
     '''
     statement : LET IDENTIFIER repeated_size EQUALS expression
     '''
-    pass
+    global triplos_queue
+    if(p[3] == None):
+        p[0] = ['=', p[2], p[5]]
+        triplos_queue.append(p[0])
+        print(p[0])
 
 def p_procedure(p):
     '''
     procedure : LABEL block RETURN procedure
-                | 
+                | empty
     '''
     pass
 
@@ -103,7 +110,11 @@ def p_expression(p):
     expression : expression_s op_rel expression_s
                 | expression_s
     '''
-    pass
+    if(len(p) == 2):
+        p[0] = p[1]
+    else:
+        p[0] = [p[2], p[1], p[3]]
+        print(p[0])
 
 def p_expression_s(p):
     '''
@@ -112,23 +123,34 @@ def p_expression_s(p):
                 | term MINUS expression_s
                 | term OR expression_s
     '''
-    pass
+    if(len(p) == 2):
+        p[0] = p[1]
+    else:
+        p[0] = [p[2], p[1], p[3]]
+        print(p[0])
 
 def p_term(p):
     '''
     term : factor
-                | factor MULTIPLY term
-                | factor DIVIDE term
-                | factor AND term
+        | factor MULTIPLY term
+        | factor DIVIDE term
+        | factor AND term
     '''
-    pass
+    if(len(p) == 2):
+        p[0] = p[1]
+    else:
+        p[0] = [p[2], p[1], p[3]]
+        print(p[0])
 
 def p_factor(p):
     '''
     factor : elem
             | OPENPAR expression CLOSEPAR
     '''
-    pass
+    if(len(p) == 2):
+        p[0] = p[1]
+    else:
+        p[0] = p[2]
 
 def p_elem_num(p):
     '''
@@ -136,7 +158,10 @@ def p_elem_num(p):
         | FLOAT
         | IDENTIFIER repeated_size
     '''
-    pass
+    if(len(p) == 2):
+        p[0] = p[1]
+    elif(p[2] == None):
+        p[0] = p[1]
 
 def p_op_rel(p):
     '''
@@ -144,22 +169,65 @@ def p_op_rel(p):
             | GREATERTHAN
             | ISEQUALTO
     '''
-    pass
+    p[0] = p[1]
 
 def p_error(p):
     print("Syntax error found!")
     pass
 
+def p_empty(p):
+    '''
+    empty : 
+    '''
+    p[0] = None
+
 # PARSER
 # -------------------------------------------------------------------------
 parser = yacc.yacc()
-env = {}
+
+symbol_table = {}
+aux_dim = []
+triplos_queue = []
+
+def run(p):
+    global triplos_queue
+    global symbol_table
+    if(type(p[2]) == list):
+        p[2] = run(p[2])
+
+        if(p[0] == '='):
+            symbol_table[p[1]][1] = p[2]
+    else:
+        if(type(p[1]) == str):
+            p[1] = symbol_table[p[1]][1]
+        if(type(p[2]) == str):
+            p[2] = symbol_table[p[2]][1]
+
+        if p[0] == '+':
+            return p[1] + p[2]
+        elif p[0] == '-':
+            return p[1] - p[2]
+        elif p[0] == '*':
+            return p[1] * p[2]
+        elif p[0] == '/':
+            return p[1] / p[2]
 
 try:
     # s = input('>> ')
-    with open('programa_ejemplo.txt','r', encoding='utf8') as file:
+    with open('ejemplo_expresiones.txt','r', encoding='utf8') as file:
         s = file.read()
 except EOFError:
     quit()
 parser.parse(s)
-print(env)
+
+print('\nTabla de Simbolos:')
+print(symbol_table, end='\n\n')
+
+print('Triplos queue:')
+print(triplos_queue, end='\n\n')
+
+for instruction in triplos_queue:
+    run(instruction)
+
+print('Tabla de Simbolos:')
+print(symbol_table, end='\n\n')
