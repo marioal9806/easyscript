@@ -192,25 +192,25 @@ triplos_queue = []
 def run(p):
     global triplos_queue
     global symbol_table
-    if(type(p[2]) == list):
-        p[2] = run(p[2])
+    if type(p) == list:
 
         if(p[0] == '='):
-            symbol_table[p[1]][1] = p[2]
-    else:
+            symbol_table[p[1]][1] = run(p[2])
         if(type(p[1]) == str):
             p[1] = symbol_table[p[1]][1]
         if(type(p[2]) == str):
             p[2] = symbol_table[p[2]][1]
 
         if p[0] == '+':
-            return p[1] + p[2]
+            return run(p[1]) + run(p[2])
         elif p[0] == '-':
-            return p[1] - p[2]
+            return run(p[1]) - run(p[2])
         elif p[0] == '*':
-            return p[1] * p[2]
+            return run(p[1]) * run(p[2])
         elif p[0] == '/':
-            return p[1] / p[2]
+            return run(p[1]) / run(p[2])
+    else:
+        return p
 
 try:
     # s = input('>> ')
