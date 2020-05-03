@@ -195,11 +195,16 @@ def run(p):
     if type(p) == list:
 
         if(p[0] == '='):
-            symbol_table[p[1]][1] = run(p[2])
+            try:
+                symbol_table[p[1]][1] = run(p[2])
+            except:
+                print(f"ERROR: UNDECLARED VARIABLE \"{p[1]}\"")
+                quit()
         if(type(p[1]) == str):
             p[1] = symbol_table[p[1]][1]
         if(type(p[2]) == str):
             p[2] = symbol_table[p[2]][1]
+            
 
         if p[0] == '+':
             return run(p[1]) + run(p[2])
@@ -209,6 +214,21 @@ def run(p):
             return run(p[1]) * run(p[2])
         elif p[0] == '/':
             return run(p[1]) / run(p[2])
+        elif p[0] == '>':
+            if run(p[1]) > run(p[2]):
+                return 1
+            else:
+                return 0
+        elif p[0] == '<':
+            if run(p[1]) < run(p[2]):
+                return 1
+            else:
+                return 0
+        elif p[0] == '==':
+            if run(p[1]) == run(p[2]):
+                return 1
+            else:
+                return 0
     else:
         return p
 

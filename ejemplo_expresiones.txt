@@ -3,6 +3,7 @@ DIM a, b, c AS INT
 
 LET a = 1 + 2
 LET b = a + (3 - 2 * ( 1 + 1 ))
-LET c = a + b
+LET c = b + 1
+LET d = a == c
 
 END
