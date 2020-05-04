@@ -72,7 +72,18 @@ def convertStandardType(temp_type):
     elif temp_type == float:
         return 'FLOAT'
 
-def getType(type1, type2, type3):
+def getOperatorType(op):
+    if(type(op) == str):
+        type_op = symbol_table[op][0]
+        op = symbol_table[op][1]
+    elif(type(op) == list):
+        op = run(op)
+        type_op = convertStandardType(type(op))
+    else:
+        type_op = convertStandardType(type(op))
+    return (type_op, op)
+
+def getResultType(type1, type2, type3):
     op_type = type_rules[type1][type2][type3]
     if op_type == 'X':
         print(f"TYPE ERROR: CANNOT PERFORM {type2} {type1} {type3} OPERATION")
@@ -111,30 +122,11 @@ def run(p):
         op1 = p[1]
         op2 = p[2]
 
-        
-
-        if(type(op1) == str):
-            type1 = symbol_table[op1][0]
-            op1 = symbol_table[op1][1]
-        elif(type(op1) == list):
-            op1 = run(op1)
-            type1 = convertStandardType(type(op1))
-        else:
-            type1 = convertStandardType(type(op1))
-
-
-        if(type(op2) == str):
-            type2 = symbol_table[op2][0]
-            op2 = symbol_table[op2][1]
-        elif(type(op2) == list):
-            op2 = run(op2)
-            type2 = convertStandardType(type(op2))
-        else:
-            type2 = convertStandardType(type(op2))
-
+        type1, op1 = getOperatorType(op1)
+        type2, op2 = getOperatorType(op2)
 
         # Arithmetic operations
-        op_type = getType(type1, type2, p[0])
+        op_type = getResultType(type1, type2, p[0])
 
         if p[0] == '+':
             result = op1 + op2
