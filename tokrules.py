@@ -78,14 +78,14 @@ def t_LABEL_SALTO(t):
     t.type = 'LABEL_SALTO'
     return t
 
-def t_INT(t):
-    r'\d+'
-    t.value = int(t.value)
-    return t
-
 def t_FLOAT(t):
     r'\d+\.\d'
     t.value = float(t.value)
+    return t
+
+def t_INT(t):
+    r'\d+'
+    t.value = int(t.value)
     return t
 
 def t_SIZE(t):

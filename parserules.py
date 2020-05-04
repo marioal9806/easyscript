@@ -1,6 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+from collections import deque
 
 # LEXER
 # -----------------------------------------------------------------------------
@@ -9,8 +10,10 @@ from tokrules import *
 lexer = lex.lex(module=tokrules)
 
 symbol_table = {}
-aux_dim = []
 triplos_queue = []
+
+queue_var = deque()
+stack_type = deque()
 
 def p_programa(p):
     '''
@@ -24,10 +27,11 @@ def p_var(p):
         | DIM repeated_identifier AS STRING_TYPE var
         | empty
     '''
-    global aux_dim
-    if(len(p) != 2):
-        for variable in aux_dim:
-            symbol_table[variable] = [p[4],None]
+    global queue_var
+    global stack_type
+    if(len(p) > 2):
+        stack_type.append(p[4])
+        
 
 def p_repeated_size(p):
     '''
@@ -42,8 +46,17 @@ def p_repeated_identifier(p):
     repeated_identifier : IDENTIFIER COMMA repeated_identifier
                         | IDENTIFIER
     '''
-    global aux_dim
-    aux_dim.append(p[1])
+    global queue_var
+    if len(p) == 2:
+        queue_var.appendleft(p[1]+"$")
+        p[0] = None
+    else:
+        if p[3] == None:
+            queue_var.appendleft(p[1])
+        else:
+            queue_var.appendleft(p[3])
+            queue_var.appendleft(p[1])
+            p[0] = None
 
 def p_var_type(p):
     '''
