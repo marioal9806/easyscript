@@ -104,12 +104,12 @@ def run(p):
         
         # Assignment operation
         if(p[0] == '='):
-            # try:
+            try:
                 symbol_table[p[1]][1] = run(p[2])
                 return
-            # except KeyError:
-                # print(f"ERROR: UNDECLARED VARIABLE \'{p[1]}\'")
-                # quit()
+            except KeyError as err:
+                print(f"ERROR: UNDECLARED VARIABLE {err}")
+                quit()
         type1 = ""
         type2 = ""
         print(symbol_table)
