@@ -94,7 +94,6 @@ def p_statement_assignment(p):
     if(p[3] == None):
         p[0] = ['=', p[2], p[5]]
         triplos_queue.append(p[0])
-        print(p[0])
 
 def p_procedure(p):
     '''
@@ -126,7 +125,6 @@ def p_expression(p):
         p[0] = p[1]
     else:
         p[0] = [p[2], p[1], p[3]]
-        print(p[0])
 
 def p_expression_s(p):
     '''
@@ -139,7 +137,6 @@ def p_expression_s(p):
         p[0] = p[1]
     else:
         p[0] = [p[2], p[1], p[3]]
-        print(p[0])
 
 def p_term(p):
     '''
@@ -152,7 +149,6 @@ def p_term(p):
         p[0] = p[1]
     else:
         p[0] = [p[2], p[1], p[3]]
-        print(p[0])
 
 def p_factor(p):
     '''

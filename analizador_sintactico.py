@@ -40,8 +40,6 @@ type_rules = {
 def processVariableDeclaration():
     global queue_var
     global stack_type
-    print(queue_var)
-    print(stack_type)
     while len(queue_var) != 1:
         end_parse = False
         curr_type = stack_type.pop()
@@ -112,12 +110,6 @@ def run(p):
                 quit()
         type1 = ""
         type2 = ""
-        print(symbol_table)
-        print(p[0])
-        print(p[1])
-        print(type(p[1]))
-        print(p[2])
-        print(type(p[2]))
         
         op1 = p[1]
         op2 = p[2]
@@ -180,9 +172,6 @@ print(triplos_queue, end='\n\n')
 
 # Process all the variable declarations
 processVariableDeclaration()
-
-print('\nTabla de Simbolos:')
-print(symbol_table, end='\n\n')
 
 # Process all the actions in the intermediate code
 for instruction in triplos_queue:
