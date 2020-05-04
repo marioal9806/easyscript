@@ -160,16 +160,22 @@ def p_factor(p):
     else:
         p[0] = p[2]
 
-def p_elem_num(p):
+def p_elem_float(p):
     '''
     elem : INT
-        | FLOAT
         | IDENTIFIER repeated_size
+        | elem_else
     '''
     if(len(p) == 2):
         p[0] = p[1]
     elif(p[2] == None):
         p[0] = p[1]
+
+def p_elem(p):
+    '''
+    elem_else : FLOAT
+    '''
+    p[0] = p[1]
 
 def p_op_rel(p):
     '''
@@ -180,7 +186,7 @@ def p_op_rel(p):
     p[0] = p[1]
 
 def p_error(p):
-    print("Syntax error found!")
+    print(f"Syntax error found: {p}")
     pass
 
 def p_empty(p):

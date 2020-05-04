@@ -79,7 +79,7 @@ def t_LABEL_SALTO(t):
     return t
 
 def t_FLOAT(t):
-    r'\d+\.\d'
+    r'\d+\.\d+'
     t.value = float(t.value)
     return t
 
