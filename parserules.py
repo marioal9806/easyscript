@@ -11,9 +11,19 @@ lexer = lex.lex(module=tokrules)
 
 symbol_table = {}
 triplos_queue = []
+cont = 0
+stack_saltos = deque()
 
 queue_var = deque()
 stack_type = deque()
+
+def rellenar(dir, val):
+    print(dir)
+    global triplos_queue
+    if(triplos_queue[dir][0] == 'gotofalso'):
+        triplos_queue[dir][2] = val
+    elif(triplos_queue[dir][0] == 'goto'):
+        triplos_queue[dir][1] = val
 
 def p_programa(p):
     '''
@@ -31,7 +41,6 @@ def p_var(p):
     global stack_type
     if(len(p) > 2):
         stack_type.append(p[4])
-        
 
 def p_repeated_size(p):
     '''
@@ -79,21 +88,63 @@ def p_statement(p):
         | FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
         | WHILE expression block LOOP
         | DO block LOOP WHILE expression
-        | IF expression THEN block ELSE block END IF
         | GOSUB LABEL
         | GOTO LABEL
         | LABEL_SALTO
     '''
     pass
 
+def p_statement_if(p):
+    '''
+    statement : IF aux_if THEN block ELSE aux_else block END IF aux_fin
+    '''
+    pass
+
+def p_aux_if(p):
+    '''
+    aux_if : expression
+    '''
+    global triplos_queue
+    global cont
+    gotofalso = ['gotofalso', p[1], None]
+    triplos_queue.append(gotofalso)
+    cont += 1
+    stack_saltos.appendleft(cont - 1)
+
+def p_aux_else(p):
+    '''
+    aux_else : empty
+    '''
+    global triplos_queue
+    global stack_saltos
+    global cont
+    goto = ['goto', None]
+    triplos_queue.append(goto)
+    cont += 1
+
+    falso = stack_saltos.popleft()
+    rellenar(falso, cont)
+
+    stack_saltos.appendleft(cont - 1)
+
+def p_aux_fin(p):
+    '''
+    aux_fin : empty
+    '''
+    global stack_saltos
+    fin = stack_saltos.popleft()
+    rellenar(fin, cont)
+
 def p_statement_assignment(p):
     '''
     statement : LET IDENTIFIER repeated_size EQUALS expression
     '''
     global triplos_queue
+    global cont
     if(p[3] == None):
         p[0] = ['=', p[2], p[5]]
         triplos_queue.append(p[0])
+        cont += 1
 
 def p_procedure(p):
     '''

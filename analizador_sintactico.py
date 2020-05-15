@@ -98,8 +98,17 @@ def formatResult(result, op_type):
 def run(p):
     global triplos_queue
     global symbol_table
+    global pc
     if type(p) == list:
-        
+        # gotofalso
+        if(p[0] == 'gotofalso'):
+            if(run(p[1]) == 0):
+                pc = p[2] - 1
+            return
+        elif(p[0] == 'goto'):
+            pc = p[1] - 1
+            return
+
         # Assignment operation
         if(p[0] == '='):
             try:
@@ -163,19 +172,32 @@ except EOFError:
     quit()
 
 global symbol_table
+global stack_saltos
+# global cont
 
 # Begin parsing process
 parser.parse(s)
 
 print('Triplos queue:')
-print(triplos_queue, end='\n\n')
+for triplo in triplos_queue:
+    print(triplo)
+
 
 # Process all the variable declarations
 processVariableDeclaration()
 
+print('\n')
+pc = 0
 # Process all the actions in the intermediate code
-for instruction in triplos_queue:
-    run(instruction)
+while(pc != len(triplos_queue)):
+    print(triplos_queue[pc])
+    run(triplos_queue[pc])
+    pc += 1
+
+print(f'\nContador: ', end='')
+print(parserules.cont, end='\n')
+print('\nStack Saltos: ', end='')
+print(stack_saltos, end='\n\n')
 
 print('Tabla de Simbolos:')
 print(symbol_table, end='\n\n')
