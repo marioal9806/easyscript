@@ -1,13 +1,16 @@
 PROGRAM
 DIM a, b, c AS INT
 DIM d AS FLOAT
-DIM e AS INT
+DIM e, f AS INT
 
 LET a = 1 + 2
 LET b = a + (3 - 2 * ( 1 + 1 ))
 LET c = b + 1
 LET d = 2.5 + c
+LET f = 0
 
 IF b > a THEN LET d = d + 1.5 ELSE LET e = 2 + 2 END IF
+
+WHILE f < a DO LET f = f + 1 LOOP
 
 END

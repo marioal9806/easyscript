@@ -40,6 +40,8 @@ type_rules = {
 def processVariableDeclaration():
     global queue_var
     global stack_type
+    print(queue_var)
+    print(stack_type)
     while len(queue_var) != 1:
         end_parse = False
         curr_type = stack_type.pop()
@@ -60,8 +62,10 @@ def processVariableDeclaration():
         else:
             queue_var.append(next_ID)
 
-    curr_type = stack_type.pop()
-    curr_ID = queue_var.pop().rstrip('$')
+    # print(curr_type)
+    # print(stack_type)
+    # curr_type = stack_type.pop()
+    # curr_ID = queue_var.pop().rstrip('$')
     symbol_table[curr_ID] = [curr_type, None]
 
 def convertStandardType(temp_type):

@@ -18,7 +18,6 @@ queue_var = deque()
 stack_type = deque()
 
 def rellenar(dir, val):
-    print(dir)
     global triplos_queue
     if(triplos_queue[dir][0] == 'gotofalso'):
         triplos_queue[dir][2] = val
@@ -86,13 +85,49 @@ def p_statement(p):
     statement : INPUT repeated_print
         | PRINT repeated_print
         | FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
-        | WHILE expression block LOOP
         | DO block LOOP WHILE expression
         | GOSUB LABEL
         | GOTO LABEL
         | LABEL_SALTO
     '''
     pass
+
+def p_statement_while(p):
+    '''
+    statement : WHILE aux_while DO block LOOP fin_while
+    '''
+    pass
+
+def p_aux_while(p):
+    '''
+    aux_while : expression
+    '''
+    global stack_saltos
+    global triplos_queue
+    global cont
+
+    stack_saltos.appendleft(cont)
+
+    gotofalso = ['gotofalso', p[1], None]
+    triplos_queue.append(gotofalso)
+    cont += 1
+    stack_saltos.appendleft(cont - 1)
+
+def p_aux_fin_while(p):
+    '''
+    fin_while : empty
+    '''
+    global stack_saltos
+    global triplos_queue
+    global cont
+    falso = stack_saltos.popleft()
+    retorno = stack_saltos.popleft()
+
+    goto = ['goto', retorno]
+    triplos_queue.append(goto)
+    cont += 1
+    
+    rellenar(falso, cont)
 
 def p_statement_if(p):
     '''
