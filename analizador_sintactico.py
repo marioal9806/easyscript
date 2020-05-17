@@ -104,14 +104,21 @@ def run(p):
     global symbol_table
     global pc
     if type(p) == list:
-        # gotofalso
-        if(p[0] == 'gotofalso'):
-            if(run(p[1]) == 0):
+        # Goto falso
+        if p[0] == 'gotofalso' :
+            if run(p[1]) == 0:
                 pc = p[2] - 1
             return
-        elif(p[0] == 'goto'):
+        # Goto verdadero
+        elif p[0] == 'gotoverdadero':
+            if run(p[1]) == 1:
+                pc = p[2] - 1
+            return
+        # Goto
+        elif p[0] == 'goto':
             pc = p[1] - 1
             return
+        
 
         # Assignment operation
         if(p[0] == '='):

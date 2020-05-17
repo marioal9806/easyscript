@@ -13,4 +13,6 @@ IF b > a THEN LET d = d + 1.5 ELSE LET e = 2 + 2 END IF
 
 WHILE f < a DO LET f = f + 1 LOOP
 
+DO LET b = b + 1 LOOP WHILE b < e
+
 END
