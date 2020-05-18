@@ -12,8 +12,10 @@ lexer = lex.lex(module=tokrules)
 symbol_table = {}
 triplos_queue = []
 cont = 0
+cont_var = 0
 stack_saltos = deque()
 
+stack_operandos = deque()
 queue_var = deque()
 stack_type = deque()
 
@@ -23,6 +25,15 @@ def rellenar(dir, val):
         triplos_queue[dir][1] = val
     else:
         triplos_queue[dir][2] = val
+
+def getTemp():
+    global symbol_table
+    global cont_var
+    new_var = f"_{cont_var}"
+    symbol_table[new_var] = ['INT', None]
+
+    cont_var += 1
+    return new_var
 
 def p_programa(p):
     '''
@@ -84,12 +95,76 @@ def p_statement(p):
     '''
     statement : INPUT repeated_print
         | PRINT repeated_print
-        | FOR IDENTIFIER EQUALS INT TO INT block NEXT IDENTIFIER
         | GOSUB LABEL
         | GOTO LABEL
         | LABEL_SALTO
     '''
     pass
+
+# Traduccion FOR
+
+def p_statement_for(p):
+    '''
+    statement : FOR aux1 TO aux2 block NEXT aux3
+    '''
+    pass
+
+def p_for_aux1(p):
+    '''
+    aux1 : IDENTIFIER EQUALS expression
+    '''
+    global triplos_queue
+    global cont
+    global stack_operandos
+
+    stack_operandos.appendleft(p[1])
+
+    init = ['=', p[1], p[3]]
+    triplos_queue.append(init)
+    cont += 1
+
+def p_for_aux2(p):
+    '''
+    aux2 : expression
+    '''
+    global triplos_queue
+    global cont
+    global stack_operandos
+    global stack_saltos
+
+    temp = getTemp()
+    assign = ['=', temp, p[1]]
+    triplos_queue.append(assign)
+    cont += 1
+
+    identifier =  stack_operandos.popleft()
+
+    cond = ['<', identifier, temp]
+    gotof = ['gotofalso', cond, None]
+    triplos_queue.append(gotof)
+    cont += 1
+
+    stack_saltos.appendleft(cont - 2)
+
+def p_for_aux3(p):
+    '''
+    aux3 : IDENTIFIER
+    '''
+    global triplos_queue
+    global cont
+    global stack_saltos
+    increment = ['=', p[1], ['+', p[1], 1]]
+    triplos_queue.append(increment)
+    cont += 1
+
+    retorno = stack_saltos.popleft()
+    salto = ['goto', retorno]
+    triplos_queue.append(salto)
+    cont += 1
+
+    rellenar(retorno + 1, cont)
+
+# Traduccion DO WHILE
 
 def p_statement_do_while(p):
     '''
@@ -120,6 +195,8 @@ def p_aux_do_while(p):
     cont += 1
 
     triplos_queue.append(gotoverdadero)
+
+# Traduccion WHILE
 
 def p_statement_while(p):
     '''
@@ -157,6 +234,8 @@ def p_aux_fin_while(p):
     cont += 1
     
     rellenar(falso, cont)
+
+# Traduccion IF
 
 def p_statement_if(p):
     '''
@@ -230,6 +309,8 @@ def p_repeated_elem(p):
                     | elem
     '''
     pass
+
+# Traducción de Expresiones Aritmeticológicas
 
 def p_expression(p):
     '''
