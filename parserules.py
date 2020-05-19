@@ -139,7 +139,7 @@ def p_for_aux2(p):
 
     identifier =  stack_operandos.popleft()
 
-    cond = ['<', identifier, temp]
+    cond = ['<=', identifier, temp]
     gotof = ['gotofalso', cond, None]
     triplos_queue.append(gotof)
     cont += 1
@@ -375,9 +375,12 @@ def p_elem(p):
 
 def p_op_rel(p):
     '''
-    op_rel : LESSTHAN
-            | GREATERTHAN
+    op_rel : LESSTHANOREQUAL
+            | GREATERTHANOREQUAL
             | ISEQUALTO
+            | GREATERTHAN
+            | LESSTHAN
+
     '''
     p[0] = p[1]
 

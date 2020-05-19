@@ -17,21 +17,21 @@ parser = yacc.yacc(module=parserules)
 type_rules = {
 
     'INT':{
-        'INT':{'+':'INT', '-':'INT', '*': 'INT', '/':'INT', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', '>':'X', '<':'X', '==':'X'}
+        'INT':{'+':'INT', '-':'INT', '*': 'INT', '/':'INT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', '>=':'X', '<=':'X', '>':'X', '<':'X', '==':'X'}
         },
 
     'FLOAT':{
-        'INT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', '>':'X', '<':'X', '==':'X'}
+        'INT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', '>=':'X', '<=':'X', '>':'X', '<':'X', '==':'X'}
         },
     
     'STRING':{
-        'INT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', '>':'X', '<':'X', '==':'BOOL'}
+        'INT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', '>=':'X', '<=':'X', '>':'X', '<':'X', '==':'BOOL'}
     }
 }
 
@@ -154,6 +154,16 @@ def run(p):
             return formatResult(result, op_type)
         
         # Logic operations
+        elif p[0] == '>=':
+            if op1 >= op2:
+                return 1
+            else:
+                return 0
+        elif p[0] == '<=':
+            if op1 <= op2:
+                return 1
+            else:
+                return 0
         elif p[0] == '>':
             if op1 > op2:
                 return 1

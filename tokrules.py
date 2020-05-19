@@ -50,6 +50,8 @@ tokens = [
     'DIVIDE',
     'LESSTHAN',
     'GREATERTHAN',
+    'LESSTHANOREQUAL',
+    'GREATERTHANOREQUAL',
 
     'OPENPAR',
     'CLOSEPAR'
@@ -63,6 +65,8 @@ t_MULTIPLY = r'\*'
 t_DIVIDE = r'\/'
 t_OPENPAR = r'\('
 t_CLOSEPAR = r'\)'
+t_LESSTHANOREQUAL = r'\<\='
+t_GREATERTHANOREQUAL = r'\>\='
 t_LESSTHAN = r'\<'
 t_GREATERTHAN = r'\>'
 t_ignore = r' \t'
