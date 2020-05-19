@@ -356,7 +356,7 @@ def p_factor(p):
     else:
         p[0] = p[2]
 
-def p_elem_float(p):
+def p_elem(p):
     '''
     elem : INT
         | IDENTIFIER repeated_size
@@ -367,7 +367,7 @@ def p_elem_float(p):
     elif(p[2] == None):
         p[0] = p[1]
 
-def p_elem(p):
+def p_elem_float(p):
     '''
     elem_else : FLOAT
     '''
