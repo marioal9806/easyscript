@@ -1,5 +1,5 @@
 '''
-Language : ScriptGO
+Language : EasyScript
 Author : Mario Alberto Ortega
 Student ID : A01730557
 '''
