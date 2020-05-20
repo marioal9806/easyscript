@@ -123,17 +123,36 @@ def recursive_print(list_elem):
     else:
         print_elem(list_elem)
 
+def write_elem(elem):
+    if(len(elem) > 2):
+        print(f"ERROR: INPUT STATEMENT HAS MORE THAN TWO OPERANDS")
+        quit()
+    else:
+        global symbol_table
+        valor = elem[0]
+        var = elem[1][0]
+        if var in symbol_table:
+            symbol_table[var][1] = valor
+        else:
+            print(f"ERROR: UNDECLARED VARIABLE {var}")
+            quit()
+        
+
 def run(p):
     global triplos_queue
     global symbol_table
     global pc
     if type(p) == list:
-        # Goto falso
+        # Print
         if p[0] == 'print':
-            print(p[1])
             recursive_print(p[1])
             return
+        # Input
+        if p[0] == 'input':
+            write_elem(p[1])
+            return
 
+        # Goto falso
         if p[0] == 'gotofalso' :
             if run(p[1]) == 0:
                 pc = p[2] - 1
@@ -148,7 +167,6 @@ def run(p):
             pc = p[1] - 1
             return
         
-
         # Assignment operation
         if(p[0] == '='):
             try:
@@ -240,7 +258,6 @@ print('\n')
 pc = 0
 # Process all the actions in the intermediate code
 while(pc != len(triplos_queue)):
-    print(triplos_queue[pc])
     run(triplos_queue[pc])
     pc += 1
 
