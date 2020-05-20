@@ -94,7 +94,6 @@ def p_block(p):
 def p_statement(p):
     '''
     statement : INPUT repeated_print
-        | PRINT repeated_print
         | GOSUB LABEL
         | GOTO LABEL
         | LABEL_SALTO
@@ -296,19 +295,36 @@ def p_procedure(p):
     '''
     pass
 
+# Traducción PRINT, INPUT
+
+def p_statement_print(p):
+    '''
+    statement : PRINT repeated_print
+    '''
+    global cont
+    global triplos_queue
+
+    print_statement = ['print', p[2]]
+    cont += 1
+
+    triplos_queue.append(print_statement)
+
 def p_repeated_print(p):
     '''
     repeated_print : repeated_elem COMMA repeated_print
                     | repeated_elem
     '''
-    pass
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = [p[1], p[3]]
 
 def p_repeated_elem(p):
     '''
     repeated_elem : STRING
                     | elem
     '''
-    pass
+    p[0] = p[1]
 
 # Traducción de Expresiones Aritmeticológicas
 

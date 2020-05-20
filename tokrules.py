@@ -105,7 +105,7 @@ def t_SIZE_ID(t):
 
 def t_STRING(t):
     r'\"[a-zA-Z 0-9:!@#$%^&*()-+=/?<>,\\]+\"'
-    t.value = str(t.value.lstrip("\"").rstrip("\""))
+    t.value = str(t.value)
     return t
 
 def t_IDENTIFIER(t):

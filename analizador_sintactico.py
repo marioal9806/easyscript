@@ -99,12 +99,41 @@ def formatResult(result, op_type):
     elif op_type == 'FLOAT':
         return float(result)
 
+def print_elem(elem):
+    global symbol_table
+    if type(elem) == str:
+        if(elem[0] == "\"" and elem[-1] == "\""):
+            print(elem.rstrip("\"").lstrip("\""))
+        else:
+            try:
+                print(symbol_table[elem][1])
+            except KeyError as err:
+                print(f"ERROR: UNDECLARED VARIABLE {err}")
+                quit()
+    else:
+        print(elem)
+
+def recursive_print(list_elem):
+    if type(list_elem) == list:
+        if len(list_elem) == 1:
+            print_elem(list_elem[0])
+        else:
+            for elem in list_elem:
+                recursive_print(elem)
+    else:
+        print_elem(list_elem)
+
 def run(p):
     global triplos_queue
     global symbol_table
     global pc
     if type(p) == list:
         # Goto falso
+        if p[0] == 'print':
+            print(p[1])
+            recursive_print(p[1])
+            return
+
         if p[0] == 'gotofalso' :
             if run(p[1]) == 0:
                 pc = p[2] - 1

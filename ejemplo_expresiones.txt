@@ -17,4 +17,6 @@ DO LET b = b + 1 LOOP WHILE b < e
 
 FOR i = 0 TO 3 LET f = f + 1 NEXT i
 
+PRINT "hola", 1, a
+
 END
