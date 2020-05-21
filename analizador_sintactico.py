@@ -124,14 +124,16 @@ def recursive_print(list_elem):
         print_elem(list_elem)
 
 def write_elem(elem):
-    if(len(elem) > 2):
-        print(f"ERROR: INPUT STATEMENT HAS MORE THAN TWO OPERANDS")
+    if(len(elem) > 1):
+        print(f"ERROR: YOU CAN ONLY WRITE ONE VARIABLE")
         quit()
     else:
         global symbol_table
-        valor = elem[0]
-        var = elem[1][0]
+        
+        var = elem[0]
         if var in symbol_table:
+            valor = input()
+            # Revisar si el valor corresponde con la variable
             symbol_table[var][1] = valor
         else:
             print(f"ERROR: UNDECLARED VARIABLE {var}")

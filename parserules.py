@@ -287,6 +287,8 @@ def p_statement_assignment(p):
         triplos_queue.append(p[0])
         cont += 1
 
+# Traducción Subrutinas (Procedures)
+
 def p_procedure(p):
     '''
     procedure : LABEL block RETURN procedure
