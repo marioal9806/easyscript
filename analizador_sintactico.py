@@ -134,6 +134,17 @@ def write_elem(elem):
         if var in symbol_table:
             valor = input()
             # Revisar si el valor corresponde con la variable
+            type_var = symbol_table[var][0]
+            try:   
+                if type_var == 'INT':
+                    valor = int(valor)
+                elif type_var == 'FLOAT':
+                    valor = float(valor)
+                else:
+                    valor = str(valor)
+            except ValueError as err:
+                print(f"ERROR: INPUT FOR VARIABLE: \'{var}\' MUST BE OF TYPE: \'{type_var}\'")
+                quit()
             symbol_table[var][1] = valor
         else:
             print(f"ERROR: UNDECLARED VARIABLE {var}")
@@ -236,7 +247,7 @@ def run(p):
 
 try:
     # s = input('>> ')
-    with open('ejemplo_expresiones.txt','r', encoding='utf8') as file:
+    with open('programa_prueba2.txt','r', encoding='utf8') as file:
         s = file.read()
 except EOFError:
     quit()
