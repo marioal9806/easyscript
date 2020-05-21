@@ -98,6 +98,8 @@ def formatResult(result, op_type):
         return int(result)
     elif op_type == 'FLOAT':
         return float(result)
+    else:
+        return str(result)
 
 def print_elem(elem):
     global symbol_table
@@ -129,22 +131,19 @@ def write_elem(elem):
         quit()
     else:
         global symbol_table
-        
         var = elem[0]
+        # Comprobar que la variable se encuentra en la tabla
         if var in symbol_table:
             valor = input()
             # Revisar si el valor corresponde con la variable
             type_var = symbol_table[var][0]
             try:   
-                if type_var == 'INT':
-                    valor = int(valor)
-                elif type_var == 'FLOAT':
-                    valor = float(valor)
-                else:
-                    valor = str(valor)
+                valor = formatResult(valor, type_var)
             except ValueError as err:
                 print(f"ERROR: INPUT FOR VARIABLE: \'{var}\' MUST BE OF TYPE: \'{type_var}\'")
                 quit()
+            
+            # Actualizar valor en la tabla de símbolos
             symbol_table[var][1] = valor
         else:
             print(f"ERROR: UNDECLARED VARIABLE {var}")
