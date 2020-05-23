@@ -239,6 +239,8 @@ def run(p):
             else:
                 return 0
     else:
+        if(type(p) == str):
+            return symbol_table[p][1]
         return p
 
 # ------------------------------------------------------------------------------
