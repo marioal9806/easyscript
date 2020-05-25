@@ -19,7 +19,7 @@ reserved = {
     'FOR' : 'FOR',
     'NEXT' : 'NEXT',
     'GOTO' : 'GOTO',
-    'GOSUB' : 'GOSUB',
+    'CALL' : 'CALL',
     'RETURN' : 'RETURN',
     'TO' : 'TO',
     'INT' : 'INT_TYPE',

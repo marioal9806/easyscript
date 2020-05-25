@@ -148,41 +148,63 @@ def write_elem(elem):
         else:
             print(f"ERROR: UNDECLARED VARIABLE {var}")
             quit()
-        
 
 def run(p):
     global triplos_queue
     global symbol_table
+    global procedure_table
+    global stack_return_address
     global pc
     if type(p) == list:
+        # Call
+        if p[0] == 'call':
+            try:
+                dir_inicio = procedure_table[p[1]]
+                stack_return_address.appendleft(pc + 1)
+                pc = dir_inicio
+                return
+            except KeyError as err:
+                print(f"ERROR: UNDECLARED PROCEDURE {err}")
+                quit()
+        # Return
+        if p[0] == 'return':
+            pc = stack_return_address.popleft()
+            return
         # Print
         if p[0] == 'print':
             recursive_print(p[1])
+            pc += 1
             return
         # Input
         if p[0] == 'input':
             write_elem(p[1])
+            pc += 1
             return
 
         # Goto falso
         if p[0] == 'gotofalso' :
             if run(p[1]) == 0:
-                pc = p[2] - 1
+                pc = p[2]
+            else:
+                pc += 1
             return
         # Goto verdadero
         elif p[0] == 'gotoverdadero':
             if run(p[1]) == 1:
-                pc = p[2] - 1
+                pc = p[2]
+            else:
+                pc += 1
             return
         # Goto
         elif p[0] == 'goto':
-            pc = p[1] - 1
+            pc = p[1]
             return
         
         # Assignment operation
         if(p[0] == '='):
             try:
                 symbol_table[p[1]][1] = run(p[2])
+                pc += 1
                 return
             except KeyError as err:
                 print(f"ERROR: UNDECLARED VARIABLE {err}")
@@ -247,15 +269,15 @@ def run(p):
 # PROGRAM EXECUTION
 
 try:
-    # s = input('>> ')
-    with open('programa_prueba2.txt','r', encoding='utf8') as file:
+    with open('test_procedures.txt','r', encoding='utf8') as file:
         s = file.read()
 except EOFError:
     quit()
 
 global symbol_table
+global procedure_table
 global stack_saltos
-# global cont
+stack_return_address = deque()
 
 # Begin parsing process
 parser.parse(s)
@@ -269,11 +291,16 @@ for triplo in triplos_queue:
 processVariableDeclaration()
 
 print('\n')
+print('Tabla de Simbolos:')
+print(symbol_table, end='\n\n')
+
+print('Tabla de Procedimientos:')
+print(procedure_table, end='\n\n')
+
 pc = 0
 # Process all the actions in the intermediate code
 while(pc != len(triplos_queue)):
     run(triplos_queue[pc])
-    pc += 1
 
 print(f'\nContador: ', end='')
 print(parserules.cont, end='\n')

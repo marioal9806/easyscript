@@ -9,13 +9,17 @@ import tokrules
 from tokrules import *
 lexer = lex.lex(module=tokrules)
 
-symbol_table = {}
 triplos_queue = []
+symbol_table = {}
+procedure_table = {}
 cont = 0
-cont_var = 0
 stack_saltos = deque()
 
-stack_operandos = deque()
+# FOR
+cont_var = 0            # Contador variables temporales
+stack_id_for = deque()  # Almacena la variable de control del ciclo actual
+
+# Variable Declaration Processing
 queue_var = deque()
 stack_type = deque()
 
@@ -37,9 +41,19 @@ def getTemp():
 
 def p_programa(p):
     '''
-    programa : PROGRAM var procedure block END
+    programa : programa_aux var procedure block END
     '''
     pass
+
+def p_programa_aux(p):
+    '''
+    programa_aux : PROGRAM
+    '''
+    global triplos_queue
+    global cont
+    goto_inicial = ['goto', 1]
+    triplos_queue.append(goto_inicial)
+    cont += 1
 
 def p_var(p):
     '''
@@ -93,8 +107,7 @@ def p_block(p):
 
 def p_statement(p):
     '''
-    statement : GOSUB LABEL
-        | GOTO LABEL
+    statement : GOTO LABEL
         | LABEL_SALTO
     '''
     pass
@@ -113,9 +126,9 @@ def p_for_aux1(p):
     '''
     global triplos_queue
     global cont
-    global stack_operandos
+    global stack_id_for
 
-    stack_operandos.appendleft(p[1])
+    stack_id_for.appendleft(p[1])
 
     init = ['=', p[1], p[3]]
     triplos_queue.append(init)
@@ -127,7 +140,7 @@ def p_for_aux2(p):
     '''
     global triplos_queue
     global cont
-    global stack_operandos
+    global stack_id_for
     global stack_saltos
 
     temp = getTemp()
@@ -135,7 +148,7 @@ def p_for_aux2(p):
     triplos_queue.append(assign)
     cont += 1
 
-    identifier =  stack_operandos.popleft()
+    identifier =  stack_id_for.popleft()
 
     cond = ['<=', identifier, temp]
     gotof = ['gotofalso', cond, None]
@@ -264,7 +277,7 @@ def p_aux_else(p):
     cont += 1
 
     falso = stack_saltos.popleft()
-    rellenar(falso, cont)
+    rellenar(falso, cont - 1)
 
     stack_saltos.appendleft(cont - 1)
 
@@ -289,12 +302,44 @@ def p_statement_assignment(p):
 
 # Traducción Subrutinas (Procedures)
 
+def p_statement_procedure(p):
+    '''
+    statement : CALL LABEL
+    '''
+    global cont
+    global triplos_queue
+
+    call_statement = ['call', p[2]]
+    triplos_queue.append(call_statement)
+    cont += 1
+
 def p_procedure(p):
     '''
-    procedure : LABEL block RETURN procedure
+    procedure : aux_label block aux_return procedure
                 | empty
     '''
     pass
+
+def p_procedure_label(p):
+    '''
+    aux_label : LABEL
+    '''
+    global procedure_table
+    global cont
+    procedure_table[p[1]] = cont
+
+def p_procedure_return(p):
+    '''
+    aux_return : RETURN
+    '''
+    global triplos_queue
+    global cont
+
+    return_statement = ['return']
+    triplos_queue.append(return_statement)
+    cont += 1
+
+    rellenar(0, cont)
 
 # Traducción PRINT, INPUT
 
