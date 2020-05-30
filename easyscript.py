@@ -268,8 +268,9 @@ def run(p):
 # ------------------------------------------------------------------------------
 # PROGRAM EXECUTION
 
+program = sys.argv[1]
 try:
-    with open('test_procedures.txt','r', encoding='utf8') as file:
+    with open(program,'r', encoding='utf8') as file:
         s = file.read()
 except EOFError:
     quit()
