@@ -35,23 +35,35 @@ type_rules = {
     }
 }
 
+pc = 0
+
 # ------------------------------------------------------------------------------
 # AUXILIARY FUNCTIONS
 def processVariableDeclaration():
     global queue_var
     global stack_type
+    global array_table
+    global symbol_table
     print(queue_var)
     print(stack_type)
     while len(queue_var) != 1:
         end_parse = False
         curr_type = stack_type.pop()
         curr_ID = queue_var.pop().rstrip('$')
-        symbol_table[curr_ID] = [curr_type, None]
+        if(curr_ID in array_table):
+            descr_list = array_table[curr_ID]
+            symbol_table[curr_ID] = [curr_type, descr_list]
+        else:
+            symbol_table[curr_ID] = [curr_type, None]
         next_ID = queue_var.pop()
 
         while next_ID[-1] != '$':
             curr_ID = next_ID
-            symbol_table[curr_ID] = [curr_type, None]
+            if(curr_ID in array_table):
+                descr_list = array_table[curr_ID]
+                symbol_table[curr_ID] = [curr_type, descr_list]
+            else:
+                symbol_table[curr_ID] = [curr_type, None]
             if len(queue_var) == 0:
                 end_parse = True
                 break
@@ -277,6 +289,7 @@ except EOFError:
 
 global symbol_table
 global procedure_table
+global array_table
 global stack_saltos
 stack_return_address = deque()
 
@@ -286,19 +299,25 @@ parser.parse(s)
 print('Triplos queue:')
 for triplo in triplos_queue:
     print(triplo)
-
+print(end='\n')
 
 # Process all the variable declarations
 processVariableDeclaration()
 
 print('\n')
 print('Tabla de Simbolos:')
-print(symbol_table, end='\n\n')
+for var, value in symbol_table.items():
+    print(var, ": ", value)
+print(end='\n')
 
 print('Tabla de Procedimientos:')
 print(procedure_table, end='\n\n')
 
-pc = 0
+print('Array Table:')
+for var, value in array_table.items():
+    print(var, ": ", value)
+print(end='\n')
+
 # Process all the actions in the intermediate code
 while(pc != len(triplos_queue)):
     run(triplos_queue[pc])

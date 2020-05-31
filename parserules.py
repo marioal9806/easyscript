@@ -23,6 +23,15 @@ stack_id_for = deque()  # Almacena la variable de control del ciclo actual
 queue_var = deque()
 stack_type = deque()
 
+# Dimensioned variable declaration process
+M = 1
+i = 0
+description_list = [[None,0],] 
+    # [0] -> size, M 
+    # [1:] -> dim, m
+base = 0
+array_table = {}
+
 def rellenar(dir, val):
     global triplos_queue
     if(triplos_queue[dir][0] == 'goto'):
@@ -57,7 +66,7 @@ def p_programa_aux(p):
 
 def p_var(p):
     '''
-    var : DIM repeated_identifier AS type repeated_size var
+    var : DIM repeated_identifier AS type repeated_size aux_size var
         | DIM repeated_identifier AS STRING_TYPE var
         | empty
     '''
@@ -69,10 +78,58 @@ def p_var(p):
 def p_repeated_size(p):
     '''
     repeated_size : SIZE repeated_size
-                    | SIZE_ID repeated_size
                     | empty
     '''
-    pass
+    global M
+    global i
+    global description_list
+    if(len(p) != 2):
+        description_list.insert(1, [p[1], None])
+        M = M * p[1]
+        i += 1
+
+def p_aux_size(p):
+    '''
+    aux_size : empty
+    '''
+    global M
+    global i
+    global description_list
+    global base
+    if len(description_list) > 1:
+        description_list[0][0] = i
+        description_list[0][1] = M
+        j = 1
+        while(j < len(description_list) - 1):
+            description_list[j][1] = description_list[j - 1][1] // description_list[j][0]
+            j += 1
+        description_list[j][1] = base
+        base += M
+
+        M = 1
+        i = 0
+
+        global queue_var
+        global array_table
+        aux_var_list = []
+        curr_var = queue_var.popleft()
+        aux_var_list.append(curr_var)
+        while(len(queue_var) != 0):
+            next_var = queue_var.popleft()
+            if(next_var[-1] == '$'):
+                aux_var_list.append(next_var.rstrip('$'))
+                break
+            else:
+                aux_var_list.append(next_var)
+
+        for var in aux_var_list:
+            array_table[var] = description_list
+        
+        aux_var_list[0] = aux_var_list[0] + '$'
+        for var in aux_var_list:
+            queue_var.appendleft(var)
+
+        description_list = [[None,0],]
 
 def p_repeated_identifier(p):
     '''
@@ -432,13 +489,21 @@ def p_factor(p):
 def p_elem(p):
     '''
     elem : INT
-        | IDENTIFIER repeated_size
+        | IDENTIFIER repeated_size_access
         | elem_else
     '''
     if(len(p) == 2):
         p[0] = p[1]
     elif(p[2] == None):
         p[0] = p[1]
+
+def p_repeated_size_access(p):
+    '''
+    repeated_size_access : SIZE repeated_size_access
+                    | SIZE_ID repeated_size_access
+                    | empty
+    '''
+    pass
 
 def p_elem_float(p):
     '''
