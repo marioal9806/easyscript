@@ -17,7 +17,7 @@ stack_saltos = deque()
 
 # FOR
 cont_var = 0            # Contador variables temporales
-stack_id_for = deque()  # Almacena la variable de control del ciclo actual
+stack_id = deque()  # Almacena la variable de control del ciclo actual
 
 # Variable Declaration Processing
 queue_var = deque()
@@ -31,6 +31,10 @@ description_list = [[None,0],]
     # [1:] -> dim, m
 base = 0
 array_table = {}
+
+# Array Variable Access Parsing
+dim_list = deque()
+is_array = False
 
 def rellenar(dir, val):
     global triplos_queue
@@ -77,15 +81,15 @@ def p_var(p):
 
 def p_repeated_size(p):
     '''
-    repeated_size : SIZE repeated_size
+    repeated_size : LBRACKET INT RBRACKET repeated_size
                     | empty
     '''
     global M
     global i
     global description_list
     if(len(p) != 2):
-        description_list.insert(1, [p[1], None])
-        M = M * p[1]
+        description_list.insert(1, [p[2], None])
+        M = M * p[2]
         i += 1
 
 def p_aux_size(p):
@@ -183,9 +187,9 @@ def p_for_aux1(p):
     '''
     global triplos_queue
     global cont
-    global stack_id_for
+    global stack_id
 
-    stack_id_for.appendleft(p[1])
+    stack_id.appendleft(p[1])
 
     init = ['=', p[1], p[3]]
     triplos_queue.append(init)
@@ -197,7 +201,7 @@ def p_for_aux2(p):
     '''
     global triplos_queue
     global cont
-    global stack_id_for
+    global stack_id
     global stack_saltos
 
     temp = getTemp()
@@ -205,7 +209,7 @@ def p_for_aux2(p):
     triplos_queue.append(assign)
     cont += 1
 
-    identifier =  stack_id_for.popleft()
+    identifier =  stack_id.popleft()
 
     cond = ['<=', identifier, temp]
     gotof = ['gotofalso', cond, None]
@@ -348,14 +352,13 @@ def p_aux_if_fin(p):
 
 def p_statement_assignment(p):
     '''
-    statement : LET IDENTIFIER repeated_size EQUALS expression
+    statement : LET aux_array EQUALS expression
     '''
     global triplos_queue
     global cont
-    if(p[3] == None):
-        p[0] = ['=', p[2], p[5]]
-        triplos_queue.append(p[0])
-        cont += 1
+    p[0] = ['=', p[2], p[4]]
+    triplos_queue.append(p[0])
+    cont += 1
 
 # Traducción Subrutinas (Procedures)
 
@@ -489,21 +492,102 @@ def p_factor(p):
 def p_elem(p):
     '''
     elem : INT
-        | IDENTIFIER repeated_size_access
+        | aux_array
         | elem_else
     '''
-    if(len(p) == 2):
+    p[0] = p[1]
+
+def p_aux_array(p):
+    '''
+    aux_array : size_identifier repeated_size_access end_array
+    '''
+    if p[3] == None:
         p[0] = p[1]
-    elif(p[2] == None):
-        p[0] = p[1]
+    else:
+        p[0] = p[3]
+
+def p_size_identifier(p):
+    '''
+    size_identifier : IDENTIFIER
+    '''
+    global stack_id
+    stack_id.append(p[1])
+    p[0] = p[1]
+
 
 def p_repeated_size_access(p):
     '''
-    repeated_size_access : SIZE repeated_size_access
-                    | SIZE_ID repeated_size_access
+    repeated_size_access : LBRACKET expression RBRACKET repeated_size_access
                     | empty
     '''
-    pass
+    global dim_list
+    global stack_id
+    global array_table
+    global triplos_queue
+    global cont
+    global is_array
+    if(len(p) > 2):
+        is_array = True
+        dim_list.appendleft(p[2])
+    else:
+        p[0] = None
+
+def p_end_array(p):
+    '''
+    end_array : empty
+    '''
+    global array_table
+    global is_array
+    global dim_list
+    global cont
+    global triplos_queue
+    global stack_id
+    if is_array:
+        array_id = stack_id.pop()
+        try:
+            # Verificar que exista dicho array
+            if array_id not in array_table:
+                raise Exception(array_id)
+            else:
+                idx = 0
+                k = 1
+                size = array_table[array_id][0][0]
+                
+                # Verificar que el num de dimensiones coincida
+                try:
+                    if size != len(dim_list):
+                        raise Exception(size)
+                
+                    while(k <= size):
+                        current_dim = dim_list[k-1]
+                        
+                        # Verificar si dk está dentro de las dimensiones permitidas
+                        verifica = ['verify', array_id, current_dim, k]
+                        triplos_queue.append(verifica)
+                        cont += 1
+
+                        if k == size:
+                            break
+
+                        else:
+                            m = array_table[array_id][k][1]
+                            idx += current_dim*m
+                            k = k + 1
+                    
+                    
+                    idx += dim_list[k - 1] + array_table[array_id][k][1]
+
+                    is_array = False
+                    dim_list.clear()
+                    p[0] = (idx,)
+                except Exception as err:
+                    print(f"ERROR: Vector {array_id} expected {size} dimensions")
+                    quit()
+
+        except Exception as err:
+            print(f"ERROR: Undeclared Dimensioned Variable \'{err.args}\'")
+            quit()
+
 
 def p_elem_float(p):
     '''

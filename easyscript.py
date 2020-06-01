@@ -10,6 +10,8 @@ import sys
 import parserules
 from parserules import *
 
+from rlist import rlist
+
 # PARSER
 # -------------------------------------------------------------------------
 parser = yacc.yacc(module=parserules)
@@ -36,6 +38,7 @@ type_rules = {
 }
 
 pc = 0
+array_space = rlist(0)
 
 # ------------------------------------------------------------------------------
 # AUXILIARY FUNCTIONS
@@ -92,6 +95,9 @@ def getOperatorType(op):
         op = symbol_table[op][1]
     elif(type(op) == list):
         op = run(op)
+        type_op = convertStandardType(type(op))
+    elif(type(op) == tuple):
+        op = array_space[op[0]]
         type_op = convertStandardType(type(op))
     else:
         type_op = convertStandardType(type(op))
@@ -163,11 +169,28 @@ def write_elem(elem):
 
 def run(p):
     global triplos_queue
+    global array_space
     global symbol_table
     global procedure_table
     global stack_return_address
     global pc
     if type(p) == list:
+        # Verify
+        if p[0] == 'verify':
+            try:
+                variable = p[1]
+                offset = p[2]
+                dim = p[3]
+                if (offset < symbol_table[variable][1][dim][0] and 
+                    offset >= 0):
+                    pc += 1
+                    return
+                else:
+                    raise Exception(variable, offset)
+            except Exception as err:
+                x, y = err.args
+                print(f"ERROR: Index {y} out of bounds on Vector \'{x}\''")
+                quit()
         # Call
         if p[0] == 'call':
             try:
@@ -214,13 +237,30 @@ def run(p):
         
         # Assignment operation
         if(p[0] == '='):
-            try:
-                symbol_table[p[1]][1] = run(p[2])
+            if(type(p[1]) == tuple and type(p[2]) == tuple):
+                array_space[p[1][0]] = array_space[p[2][0]]
                 pc += 1
                 return
-            except KeyError as err:
-                print(f"ERROR: UNDECLARED VARIABLE {err}")
-                quit()
+            elif(type(p[1]) == tuple):
+                array_space[p[1][0]] = run(p[2])
+                pc += 1
+                return
+            elif(type(p[2]) == tuple):
+                try:
+                    symbol_table[p[1]][1] = array_space[p[2][0]]
+                    pc += 1
+                    return
+                except KeyError as err:
+                    print(f"ERROR: UNDECLARED VARIABLE {err}")
+                    quit()
+            else:
+                try:
+                    symbol_table[p[1]][1] = run(p[2])
+                    pc += 1
+                    return
+                except KeyError as err:
+                    print(f"ERROR: UNDECLARED VARIABLE {err}")
+                    quit()
         type1 = ""
         type2 = ""
         
@@ -304,7 +344,6 @@ print(end='\n')
 # Process all the variable declarations
 processVariableDeclaration()
 
-print('\n')
 print('Tabla de Simbolos:')
 for var, value in symbol_table.items():
     print(var, ": ", value)
@@ -328,4 +367,9 @@ print('\nStack Saltos: ', end='')
 print(stack_saltos, end='\n\n')
 
 print('Tabla de Simbolos:')
-print(symbol_table, end='\n\n')
+for var, value in symbol_table.items():
+    print(var, ": ", value)
+print(end='\n')
+
+print('Array Space:')
+print(array_space, end='\n\n')

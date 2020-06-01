@@ -37,8 +37,6 @@ tokens = [
     'INT',
     'FLOAT',
     'STRING',
-    'SIZE',
-    'SIZE_ID',
     
     'IDENTIFIER',
 
@@ -54,7 +52,9 @@ tokens = [
     'GREATERTHANOREQUAL',
 
     'OPENPAR',
-    'CLOSEPAR'
+    'CLOSEPAR',
+    'LBRACKET',
+    'RBRACKET'
 ] + list(reserved.values())
 
 t_ISEQUALTO = r'\=\='
@@ -65,6 +65,8 @@ t_MULTIPLY = r'\*'
 t_DIVIDE = r'\/'
 t_OPENPAR = r'\('
 t_CLOSEPAR = r'\)'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
 t_LESSTHANOREQUAL = r'\<\='
 t_GREATERTHANOREQUAL = r'\>\='
 t_LESSTHAN = r'\<'
@@ -90,17 +92,6 @@ def t_FLOAT(t):
 def t_INT(t):
     r'\d+'
     t.value = int(t.value)
-    return t
-
-def t_SIZE(t):
-    r'\[\d+\]'
-    t.value = int(t.value.lstrip('\[').rstrip('\]'))
-    return t
-
-def t_SIZE_ID(t):
-    r'\[[a-zA-Z_][a-zA-Z0-9_]*\]'
-    t.type = 'SIZE_ID'
-    t.value = t.value.lstrip('\[').rstrip('\]')
     return t
 
 def t_STRING(t):
