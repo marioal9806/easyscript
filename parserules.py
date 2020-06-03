@@ -39,13 +39,13 @@ class MyParser(object):
     dim_list = deque()
     is_array = False
 
-    def rellenar(dir, val):
+    def rellenar(self, dir, val):
         if(self.triplos_queue[dir][0] == 'goto'):
             self.triplos_queue[dir][1] = val
         else:
             self.triplos_queue[dir][2] = val
 
-    def getTemp():
+    def getTemp(self):
         new_var = f"_{self.cont_var}"
         self.symbol_table[new_var] = ['INT', None]
 
@@ -208,7 +208,7 @@ class MyParser(object):
         self.triplos_queue.append(salto)
         self.cont += 1
 
-        rellenar(retorno + 1, self.cont)
+        self.rellenar(retorno + 1, self.cont)
 
     # Traduccion DO WHILE
 
@@ -264,7 +264,7 @@ class MyParser(object):
         self.triplos_queue.append(goto)
         self.cont += 1
         
-        rellenar(falso, self.cont)
+        self.rellenar(falso, self.cont)
 
     # Traduccion IF
 
@@ -292,7 +292,7 @@ class MyParser(object):
         self.cont += 1
 
         falso = self.stack_saltos.popleft()
-        rellenar(falso, self.cont - 1)
+        self.rellenar(falso, self.cont - 1)
 
         self.stack_saltos.appendleft(self.cont - 1)
 
@@ -301,7 +301,7 @@ class MyParser(object):
         aux_fin : empty
         '''
         fin = self.stack_saltos.popleft()
-        rellenar(fin, self.cont)
+        self.rellenar(fin, self.cont)
 
     def p_statement_assignment(self, p):
         '''
@@ -342,7 +342,7 @@ class MyParser(object):
         self.triplos_queue.append(return_statement)
         self.cont += 1
 
-        rellenar(0, self.cont)
+        self.rellenar(0, self.cont)
 
     # Traducción PRINT, INPUT
 
