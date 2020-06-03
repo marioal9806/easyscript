@@ -1,6 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+import copy
 from collections import deque
 
 # LEXER
@@ -96,26 +97,33 @@ class MyParser(object):
             while(j < len(self.description_list) - 1):
                 self.description_list[j][1] = self.description_list[j - 1][1] // self.description_list[j][0]
                 j += 1
-            self.description_list[j][1] = self.base
-            self.base += self.M
+            self.description_list[j][1] = copy.deepcopy(self.base)
+            # self.base += self.M
 
             self.M = 1
             self.i = 0
 
             aux_var_list = []
             curr_var = self.queue_var.popleft()
-            aux_var_list.append(curr_var)
-            while(len(self.queue_var) != 0):
-                next_var = self.queue_var.popleft()
-                if(next_var[-1] == '$'):
-                    aux_var_list.append(next_var.rstrip('$'))
-                    break
-                else:
-                    aux_var_list.append(next_var)
+            if(curr_var[-1] == '$'):
+                aux_var_list.append(curr_var.rstrip('$'))
+            else:
+                aux_var_list.append(curr_var)
+                while(len(self.queue_var) != 0):
+                    next_var = self.queue_var.popleft()
+                    if(next_var[-1] == '$'):
+                        aux_var_list.append(next_var.rstrip('$'))
+                        break
+                    else:
+                        aux_var_list.append(next_var)
 
-            for var in aux_var_list:
-                self.array_table[var] = self.description_list
-            
+            for idx in range(0, len(aux_var_list)):
+                size = self.description_list[0][1]
+                copy_description_list = copy.deepcopy(self.description_list)
+                self.array_table[aux_var_list[idx]] = copy_description_list
+                self.base += size
+                self.description_list[-1][1] += size
+
             aux_var_list[0] = aux_var_list[0] + '$'
             for var in aux_var_list:
                 self.queue_var.appendleft(var)
