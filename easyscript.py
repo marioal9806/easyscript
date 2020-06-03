@@ -6,15 +6,17 @@ Student ID : A01730557
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+from collections import deque
 
-import parserules
-from parserules import *
+
+from parserules import MyParser
 
 from rlist import rlist
 
 # PARSER
 # -------------------------------------------------------------------------
-parser = yacc.yacc(module=parserules)
+p_mod = MyParser()
+parser = p_mod.parser
 
 type_rules = {
 
@@ -43,45 +45,41 @@ array_space = rlist(0)
 # ------------------------------------------------------------------------------
 # AUXILIARY FUNCTIONS
 def processVariableDeclaration():
-    global queue_var
-    global stack_type
-    global array_table
-    global symbol_table
-    print(queue_var)
-    print(stack_type)
-    while len(queue_var) != 1:
+    print(p_mod.queue_var)
+    print(p_mod.stack_type)
+    while len(p_mod.queue_var) != 1:
         end_parse = False
-        curr_type = stack_type.pop()
-        curr_ID = queue_var.pop().rstrip('$')
-        if(curr_ID in array_table):
-            descr_list = array_table[curr_ID]
-            symbol_table[curr_ID] = [curr_type, descr_list]
+        curr_type = p_mod.stack_type.pop()
+        curr_ID = p_mod.queue_var.pop().rstrip('$')
+        if(curr_ID in p_mod.array_table):
+            descr_list = p_mod.array_table[curr_ID]
+            p_mod.symbol_table[curr_ID] = [curr_type, descr_list]
         else:
-            symbol_table[curr_ID] = [curr_type, None]
-        next_ID = queue_var.pop()
+            p_mod.symbol_table[curr_ID] = [curr_type, None]
+        next_ID = p_mod.queue_var.pop()
 
         while next_ID[-1] != '$':
             curr_ID = next_ID
-            if(curr_ID in array_table):
-                descr_list = array_table[curr_ID]
-                symbol_table[curr_ID] = [curr_type, descr_list]
+            if(curr_ID in p_mod.array_table):
+                descr_list = p_mod.array_table[curr_ID]
+                p_mod.symbol_table[curr_ID] = [curr_type, descr_list]
             else:
-                symbol_table[curr_ID] = [curr_type, None]
-            if len(queue_var) == 0:
+                p_mod.symbol_table[curr_ID] = [curr_type, None]
+            if len(p_mod.queue_var) == 0:
                 end_parse = True
                 break
             else:
-                next_ID = queue_var.pop()
+                next_ID = p_mod.queue_var.pop()
         if end_parse:
             break
         else:
-            queue_var.append(next_ID)
+            p_mod.queue_var.append(next_ID)
 
     # print(curr_type)
-    # print(stack_type)
-    # curr_type = stack_type.pop()
-    # curr_ID = queue_var.pop().rstrip('$')
-    symbol_table[curr_ID] = [curr_type, None]
+    # print(p_mod.stack_type)
+    # curr_type = p_mod.stack_type.pop()
+    # curr_ID = p_mod.queue_var.pop().rstrip('$')
+    p_mod.symbol_table[curr_ID] = [curr_type, None]
 
 def convertStandardType(temp_type):
     if temp_type == int:
@@ -91,8 +89,8 @@ def convertStandardType(temp_type):
 
 def getOperatorType(op):
     if(type(op) == str):
-        type_op = symbol_table[op][0]
-        op = symbol_table[op][1]
+        type_op = p_mod.symbol_table[op][0]
+        op = p_mod.symbol_table[op][1]
     elif(type(op) == list):
         op = run(op)
         type_op = convertStandardType(type(op))
@@ -120,13 +118,12 @@ def formatResult(result, op_type):
         return str(result)
 
 def print_elem(elem):
-    global symbol_table
     if type(elem) == str:
         if(elem[0] == "\"" and elem[-1] == "\""):
             print(elem.rstrip("\"").lstrip("\""))
         else:
             try:
-                print(symbol_table[elem][1])
+                print(p_mod.symbol_table[elem][1])
             except KeyError as err:
                 print(f"ERROR: UNDECLARED VARIABLE {err}")
                 quit()
@@ -148,13 +145,12 @@ def write_elem(elem):
         print(f"ERROR: YOU CAN ONLY WRITE ONE VARIABLE")
         quit()
     else:
-        global symbol_table
         var = elem[0]
         # Comprobar que la variable se encuentra en la tabla
-        if var in symbol_table:
+        if var in p_mod.symbol_table:
             valor = input()
             # Revisar si el valor corresponde con la variable
-            type_var = symbol_table[var][0]
+            type_var = p_mod.symbol_table[var][0]
             try:   
                 valor = formatResult(valor, type_var)
             except ValueError as err:
@@ -162,16 +158,13 @@ def write_elem(elem):
                 quit()
             
             # Actualizar valor en la tabla de símbolos
-            symbol_table[var][1] = valor
+            p_mod.symbol_table[var][1] = valor
         else:
             print(f"ERROR: UNDECLARED VARIABLE {var}")
             quit()
 
 def run(p):
-    global triplos_queue
     global array_space
-    global symbol_table
-    global procedure_table
     global stack_return_address
     global pc
     if type(p) == list:
@@ -181,7 +174,7 @@ def run(p):
                 variable = p[1]
                 offset = p[2]
                 dim = p[3]
-                if (offset < symbol_table[variable][1][dim][0] and 
+                if (offset < p_mod.symbol_table[variable][1][dim][0] and 
                     offset >= 0):
                     pc += 1
                     return
@@ -194,7 +187,7 @@ def run(p):
         # Call
         if p[0] == 'call':
             try:
-                dir_inicio = procedure_table[p[1]]
+                dir_inicio = p_mod.procedure_table[p[1]]
                 stack_return_address.appendleft(pc + 1)
                 pc = dir_inicio
                 return
@@ -247,7 +240,7 @@ def run(p):
                 return
             elif(type(p[2]) == tuple):
                 try:
-                    symbol_table[p[1]][1] = array_space[p[2][0]]
+                    p_mod.symbol_table[p[1]][1] = array_space[p[2][0]]
                     pc += 1
                     return
                 except KeyError as err:
@@ -255,7 +248,7 @@ def run(p):
                     quit()
             else:
                 try:
-                    symbol_table[p[1]][1] = run(p[2])
+                    p_mod.symbol_table[p[1]][1] = run(p[2])
                     pc += 1
                     return
                 except KeyError as err:
@@ -314,7 +307,7 @@ def run(p):
                 return 0
     else:
         if(type(p) == str):
-            return symbol_table[p][1]
+            return p_mod.symbol_table[p][1]
         return p
 
 # ------------------------------------------------------------------------------
@@ -327,17 +320,13 @@ try:
 except EOFError:
     quit()
 
-global symbol_table
-global procedure_table
-global array_table
-global stack_saltos
 stack_return_address = deque()
 
 # Begin parsing process
 parser.parse(s)
 
 print('Triplos queue:')
-for triplo in triplos_queue:
+for triplo in p_mod.triplos_queue:
     print(triplo)
 print(end='\n')
 
@@ -345,29 +334,29 @@ print(end='\n')
 processVariableDeclaration()
 
 print('Tabla de Simbolos:')
-for var, value in symbol_table.items():
+for var, value in p_mod.symbol_table.items():
     print(var, ": ", value)
 print(end='\n')
 
 print('Tabla de Procedimientos:')
-print(procedure_table, end='\n\n')
+print(p_mod.procedure_table, end='\n\n')
 
 print('Array Table:')
-for var, value in array_table.items():
+for var, value in p_mod.array_table.items():
     print(var, ": ", value)
 print(end='\n')
 
 # Process all the actions in the intermediate code
-while(pc != len(triplos_queue)):
-    run(triplos_queue[pc])
+while(pc != len(p_mod.triplos_queue)):
+    run(p_mod.triplos_queue[pc])
 
 print(f'\nContador: ', end='')
-print(parserules.cont, end='\n')
+print(p_mod.cont, end='\n')
 print('\nStack Saltos: ', end='')
-print(stack_saltos, end='\n\n')
+print(p_mod.stack_saltos, end='\n\n')
 
 print('Tabla de Simbolos:')
-for var, value in symbol_table.items():
+for var, value in p_mod.symbol_table.items():
     print(var, ": ", value)
 print(end='\n')
 
