@@ -300,7 +300,7 @@ class MyParser(object):
         self.cont += 1
 
         falso = self.stack_saltos.popleft()
-        self.rellenar(falso, self.cont - 1)
+        self.rellenar(falso, self.cont)
 
         self.stack_saltos.appendleft(self.cont - 1)
 
@@ -532,7 +532,6 @@ class MyParser(object):
                 | ISEQUALTO
                 | GREATERTHAN
                 | LESSTHAN
-
         '''
         p[0] = p[1]
 

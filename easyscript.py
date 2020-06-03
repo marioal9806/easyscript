@@ -21,21 +21,21 @@ parser = p_mod.parser
 type_rules = {
 
     'INT':{
-        'INT':{'+':'INT', '-':'INT', '*': 'INT', '/':'INT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', '>=':'X', '<=':'X', '>':'X', '<':'X', '==':'X'}
+        'INT':{'+':'INT', '-':'INT', '*': 'INT', '/':'INT', 'AND':'BOOL', 'OR':'BOOL', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', 'AND':'BOOL', 'OR':'BOOL', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', 'AND':'X', 'OR':'X', '>=':'X', '<=':'X', '>':'X', '<':'X', '==':'X'}
         },
 
     'FLOAT':{
-        'INT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', '>=':'X', '<=':'X', '>':'X', '<':'X', '==':'X'}
+        'INT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', 'AND':'BOOL', 'OR':'BOOL', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', 'AND':'BOOL', 'OR':'BOOL', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', 'AND':'X', 'OR':'X', '>=':'X', '<=':'X', '>':'X', '<':'X', '==':'X'}
         },
     
     'STRING':{
-        'INT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
-        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', '>=':'X', '<=':'X', '>':'X', '<':'X', '==':'BOOL'}
+        'INT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', 'AND':'BOOL', 'OR':'BOOL', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'FLOAT':{'+':'FLOAT', '-':'FLOAT', '*': 'FLOAT', '/':'FLOAT', 'AND':'BOOL', 'OR':'BOOL', '>=':'BOOL', '<=':'BOOL', '>':'BOOL', '<':'BOOL', '==':'BOOL'},
+        'STRING':{'+':'X', '-':'X', '*': 'X', '/':'X', 'AND':'X', 'OR':'X', '>=':'X', '<=':'X', '>':'X', '<':'X', '==':'BOOL'}
     }
 }
 
@@ -305,6 +305,16 @@ def run(p):
                 return 1
             else:
                 return 0
+        elif p[0] == 'AND':
+            if run(op1) and run(op2):
+                return 1
+            else:
+                return 0
+        elif p[0] == 'OR':
+            if run(op1) or run(op2):
+                return 1
+            else: 
+                return 0
     else:
         if(type(p) == str):
             return p_mod.symbol_table[p][1]
@@ -326,12 +336,15 @@ stack_return_address = deque()
 parser.parse(s)
 
 print('Triplos queue:')
+idx = 0
 for triplo in p_mod.triplos_queue:
-    print(triplo)
+    print(idx, triplo)
+    idx += 1
 print(end='\n')
 
 # Process all the variable declarations
-processVariableDeclaration()
+if len(p_mod.queue_var) != 0:
+    processVariableDeclaration()
 
 print('Tabla de Simbolos:')
 for var, value in p_mod.symbol_table.items():
@@ -350,12 +363,12 @@ print(end='\n')
 while(pc != len(p_mod.triplos_queue)):
     run(p_mod.triplos_queue[pc])
 
-print(f'\nContador: ', end='')
-print(p_mod.cont, end='\n')
-print('\nStack Saltos: ', end='')
-print(p_mod.stack_saltos, end='\n\n')
+# print(f'\nContador: ', end='')
+# print(p_mod.cont, end='\n')
+# print('\nStack Saltos: ', end='')
+# print(p_mod.stack_saltos, end='\n\n')
 
-print('Tabla de Simbolos:')
+print('\nTabla de Simbolos:')
 for var, value in p_mod.symbol_table.items():
     print(var, ": ", value)
 print(end='\n')
