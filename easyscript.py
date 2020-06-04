@@ -75,11 +75,17 @@ def processVariableDeclaration():
         else:
             p_mod.queue_var.append(next_ID)
 
-    # print(curr_type)
-    # print(p_mod.stack_type)
-    # curr_type = p_mod.stack_type.pop()
-    # curr_ID = p_mod.queue_var.pop().rstrip('$')
-    p_mod.symbol_table[curr_ID] = [curr_type, None]
+    # Si aún hay un elemento
+    if(len(p_mod.stack_type) != 0):
+        curr_ID = p_mod.queue_var.pop().rstrip('$')
+        curr_type = p_mod.stack_type.pop()
+        p_mod.symbol_table[curr_ID] = [curr_type, None]
+        if(curr_ID in p_mod.array_table):
+            descr_list = p_mod.array_table[curr_ID]
+            p_mod.symbol_table[curr_ID] = [curr_type, descr_list]
+    # Sino
+    else:
+        p_mod.symbol_table[curr_ID] = [curr_type, None]
 
 def convertStandardType(temp_type):
     if temp_type == int:
@@ -95,7 +101,7 @@ def getOperatorType(op):
         op = run(op)
         type_op = convertStandardType(type(op))
     elif(type(op) == tuple):
-        op = array_space[op[0]]
+        op = array_space[run(op[0])]
         type_op = convertStandardType(type(op))
     else:
         type_op = convertStandardType(type(op))
@@ -128,7 +134,7 @@ def print_elem(elem):
                 print(f"ERROR: UNDECLARED VARIABLE {err}")
                 quit()
     else:
-        print(elem)
+        print(array_space[run(elem)])
 
 def recursive_print(list_elem):
     if type(list_elem) == list:
@@ -173,6 +179,10 @@ def run(p):
             try:
                 variable = p[1]
                 offset = p[2]
+                if(type(offset) == str):
+                    offset = p_mod.symbol_table[offset][1]
+                elif(type(offset) == list):
+                    offset = run(offset)
                 dim = p[3]
                 if (offset < p_mod.symbol_table[variable][1][dim][0] and 
                     offset >= 0):
@@ -230,17 +240,18 @@ def run(p):
         
         # Assignment operation
         if(p[0] == '='):
+            # Asegurarse de que el indice dimensionado es INT
             if(type(p[1]) == tuple and type(p[2]) == tuple):
-                array_space[p[1][0]] = array_space[p[2][0]]
+                array_space[run(p[1][0])] = array_space[run(p[2][0])]
                 pc += 1
                 return
             elif(type(p[1]) == tuple):
-                array_space[p[1][0]] = run(p[2])
+                array_space[run(p[1][0])] = run(p[2])
                 pc += 1
                 return
             elif(type(p[2]) == tuple):
                 try:
-                    p_mod.symbol_table[p[1]][1] = array_space[p[2][0]]
+                    p_mod.symbol_table[p[1]][1] = array_space[run(p[2][0])]
                     pc += 1
                     return
                 except KeyError as err:
@@ -316,6 +327,8 @@ def run(p):
             else: 
                 return 0
     else:
+        if(type(p) == tuple):
+            return run(p[0])
         if(type(p) == str):
             return p_mod.symbol_table[p][1]
         return p
@@ -359,14 +372,14 @@ for var, value in p_mod.array_table.items():
     print(var, ": ", value)
 print(end='\n')
 
+# Initialize array space
+array_space[p_mod.base] = 0
+print('Array Space:')
+print(array_space, end='\n\n')
+
 # Process all the actions in the intermediate code
 while(pc != len(p_mod.triplos_queue)):
     run(p_mod.triplos_queue[pc])
-
-# print(f'\nContador: ', end='')
-# print(p_mod.cont, end='\n')
-# print('\nStack Saltos: ', end='')
-# print(p_mod.stack_saltos, end='\n\n')
 
 print('\nTabla de Simbolos:')
 for var, value in p_mod.symbol_table.items():

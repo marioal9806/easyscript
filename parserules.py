@@ -35,6 +35,7 @@ class MyParser(object):
         # [1:] -> dim, m
     base = 0
     array_table = {}
+    stack_array = deque()
 
     # Array Variable Access Parsing
     dim_list = deque()
@@ -189,7 +190,7 @@ class MyParser(object):
         '''
         aux2 : expression
         '''
-        temp = getTemp()
+        temp = self.getTemp()
         assign = ['=', temp, p[1]]
         self.triplos_queue.append(assign)
         self.cont += 1
@@ -455,7 +456,8 @@ class MyParser(object):
         '''
         size_identifier : IDENTIFIER
         '''
-        self.stack_id.append(p[1])
+        if(p[1] in self.array_table):
+            self.stack_array.append(p[1])
         p[0] = p[1]
 
     def p_repeated_size_access(self, p):
@@ -474,24 +476,25 @@ class MyParser(object):
         end_array : empty
         '''
         if self.is_array:
-            array_id = self.stack_id.pop()
+            array_id = self.stack_array.pop()
             try:
                 # Verificar que exista dicho array
                 if array_id not in self.array_table:
                     raise Exception(array_id)
                 else:
+                    aux_list = []
                     idx = 0
                     k = 1
                     size = self.array_table[array_id][0][0]
-                    
+                        
                     # Verificar que el num de dimensiones coincida
                     try:
                         if size != len(self.dim_list):
                             raise Exception(size)
-                    
+                        
                         while(k <= size):
                             current_dim = self.dim_list[k-1]
-                            
+                                
                             # Verificar si dk está dentro de las dimensiones permitidas
                             verifica = ['verify', array_id, current_dim, k]
                             self.triplos_queue.append(verifica)
@@ -502,17 +505,25 @@ class MyParser(object):
 
                             else:
                                 m = self.array_table[array_id][k][1]
-                                idx += current_dim*m
+                                aux_list.append(['*',current_dim, m])
                                 k = k + 1
+
+                                if(len(aux_list) == 2):
+                                    suma = ['+', aux_list[0], aux_list[1]]
+                                    aux_list.clear()
+                                    aux_list.append(suma)
                         
-                        
-                        idx += self.dim_list[k - 1] + self.array_table[array_id][k][1]
+                        aux_list.append(['+', self.dim_list[k - 1], self.array_table[array_id][k][1]])
 
                         self.is_array = False
+                        args = len(self.dim_list)
                         self.dim_list.clear()
-                        p[0] = (idx,)
+                        if args == 1:
+                            p[0] = (aux_list[0],)
+                        else:
+                            p[0] = (['+', aux_list[0], aux_list[1]],)
                     except Exception as err:
-                        print(f"ERROR: Vector {array_id} expected {size} dimensions")
+                        print(f"ERROR: Vector \'{array_id}\' expected {size} dimensions")
                         quit()
 
             except Exception as err:
