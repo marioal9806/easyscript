@@ -177,12 +177,16 @@ def run(p):
         # Verify
         if p[0] == 'verify':
             try:
+                print(p)
                 variable = p[1]
                 offset = p[2]
                 if(type(offset) == str):
                     offset = p_mod.symbol_table[offset][1]
                 elif(type(offset) == list):
                     offset = run(offset)
+                elif(type(offset) == tuple):
+                    offset = run(offset)
+                    offset = array_space[offset]
                 dim = p[3]
                 if (offset < p_mod.symbol_table[variable][1][dim][0] and 
                     offset >= 0):
